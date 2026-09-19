@@ -159,6 +159,7 @@
       color: var(--muted);
       font-size: 10px;
       margin-bottom: 8px;
+      line-height: 1.5;
     }
 
     .mini-card button {
@@ -425,6 +426,37 @@
       battle: document.getElementById('battleTab')
     };
 
+    function normalizeArray(value) {
+      if (!value) return [];
+      if (Array.isArray(value)) return value.map(item => String(item).trim()).filter(Boolean);
+      return String(value).split(/[、,・/]/).map(item => item.trim()).filter(Boolean);
+    }
+
+    function normalizeCard(raw, index) {
+      return {
+        id: raw.id ?? raw.card_id ?? `dm-${index + 1}`,
+        name: raw.name ?? raw.card_name ?? raw.カード名 ?? '名称不明',
+        type: raw.type ?? raw.種類 ?? raw.カードタイプ ?? 'カード',
+        civilization: normalizeArray(raw.civilization ?? raw.文明),
+        cost: raw.cost ?? raw.コスト ?? 0,
+        power: raw.power ?? raw.パワー ?? raw.atk ?? null,
+        race: normalizeArray(raw.race ?? raw.種族),
+        text: raw.text ?? raw.effect ?? raw.能力 ?? '',
+        image: raw.image ?? raw.img ?? '',
+        atk: raw.power ?? raw.パワー ?? raw.atk ?? null,
+        def: raw.def ?? null
+      };
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
     function setTab(tab) {
       state.activeTab = tab;
       navButtons.forEach(btn => {
@@ -445,15 +477,22 @@
 
     function cardMatches(card, keyword) {
       if (!keyword) return true;
-      const name = (card.name || '').toLowerCase();
-      const type = (card.type || '').toLowerCase();
-      return name.includes(keyword) || type.includes(keyword);
+
+      const haystack = [
+        card.name,
+        card.type,
+        card.text,
+        ...(card.civilization || []),
+        ...(card.race || [])
+      ].filter(Boolean).join(' ').toLowerCase();
+
+      return haystack.includes(keyword);
     }
 
     function renderCardGrid() {
       const grid = document.getElementById('cardGrid');
       const q = getSearchText();
-      const filtered = state.cards.filter(card => cardMatches(card, q)).slice(0, 20);
+      const filtered = state.cards.filter(card => cardMatches(card, q)).slice(0, 50);
 
       if (!filtered.length) {
         grid.innerHTML = '<div class="mini-card"><h4>カードが見つかりません</h4><div class="mini-meta">検索条件を変えてみてください</div></div>';
@@ -462,19 +501,27 @@
 
       grid.innerHTML = filtered.map(card => {
         const already = state.deck.some(item => item.id === card.id);
-        const atk = card.atk ?? '—';
-        const def = card.def ?? '—';
+        const civ = (card.civilization || []).join('・') || '無色';
+        const race = (card.race || []).join('・') || 'なし';
+        const cost = card.cost ?? '—';
+        const power = card.power ?? '—';
+
         return `
           <div class="mini-card">
-            <h4>${card.name}</h4>
-            <div class="mini-meta">${card.type || 'カード'} / ATK ${atk} / DEF ${def}</div>
-            <button data-add="${card.id}" ${already ? 'disabled' : ''}>${already ? '追加済み' : '追加'}</button>
+            <h4>${escapeHtml(card.name)}</h4>
+            <div class="mini-meta">
+              ${escapeHtml(card.type || 'カード')}<br>
+              文明: ${escapeHtml(civ)}<br>
+              コスト: ${escapeHtml(cost)} / パワー: ${escapeHtml(power)}<br>
+              種族: ${escapeHtml(race)}
+            </div>
+            <button data-add="${escapeHtml(card.id)}" ${already ? 'disabled' : ''}>${already ? '追加済み' : '追加'}</button>
           </div>
         `;
       }).join('');
 
       grid.querySelectorAll('[data-add]').forEach(button => {
-        button.addEventListener('click', () => addToDeck(Number(button.dataset.add)));
+        button.addEventListener('click', () => addToDeck(String(button.dataset.add)));
       });
     }
 
@@ -483,23 +530,25 @@
         alert('デッキは60枚までです。');
         return;
       }
-      const card = state.cards.find(item => item.id === cardId);
+      const card = state.cards.find(item => String(item.id) === String(cardId));
       if (!card) return;
       state.deck.push({
-        id: card.id,
+        id: String(card.id),
         name: card.name,
         type: card.type,
-        atk: card.atk ?? 0,
-        def: card.def ?? 0,
-        level: card.level ?? 0,
-        image: card.card_images?.[0]?.image_url_small || ''
+        civilization: card.civilization || [],
+        cost: card.cost ?? 0,
+        power: card.power ?? 0,
+        race: card.race || [],
+        text: card.text || '',
+        image: card.image || ''
       });
       renderDeckList();
       renderCardGrid();
     }
 
     function removeFromDeck(cardId) {
-      state.deck = state.deck.filter(item => item.id !== cardId);
+      state.deck = state.deck.filter(item => String(item.id) !== String(cardId));
       renderDeckList();
       renderCardGrid();
     }
@@ -517,38 +566,38 @@
       list.innerHTML = state.deck.map(card => `
         <div class="deck-item">
           <div>
-            <div class="deck-item-name">${card.name}</div>
-            <div class="deck-item-sub">${card.type} / ATK ${card.atk}</div>
+            <div class="deck-item-name">${escapeHtml(card.name)}</div>
+            <div class="deck-item-sub">${escapeHtml(card.type)} / パワー ${escapeHtml(card.power ?? '—')}</div>
           </div>
-          <button data-remove="${card.id}">削除</button>
+          <button data-remove="${escapeHtml(card.id)}">削除</button>
         </div>
       `).join('');
 
       list.querySelectorAll('[data-remove]').forEach(button => {
-        button.addEventListener('click', () => removeFromDeck(Number(button.dataset.remove)));
+        button.addEventListener('click', () => removeFromDeck(String(button.dataset.remove)));
       });
     }
 
     function buildAiDeck() {
       if (!state.cards.length) {
         return [
-          { id: 1, name: '青眼の白龍', atk: 3000, def: 2500, type: 'ドラゴン' },
-          { id: 2, name: 'ブラック・マジシャン', atk: 2500, def: 2100, type: '魔法使い' },
-          { id: 3, name: 'サンダー・ドラゴン', atk: 2400, def: 2000, type: 'ドラゴン' },
-          { id: 4, name: 'スライム', atk: 800, def: 1000, type: '水' }
+          { id: 'ai-demo-1', name: 'ガッツドラゴン', power: 5000, type: 'クリーチャー' },
+          { id: 'ai-demo-2', name: '深海の守護者', power: 4000, type: 'クリーチャー' },
+          { id: 'ai-demo-3', name: '雷鳴の騎士', power: 4500, type: 'クリーチャー' },
+          { id: 'ai-demo-4', name: '祝福の炎', power: 0, type: '呪文' }
         ];
       }
-      const pool = state.cards.slice();
+
+      const pool = [...state.cards];
       const chosen = [];
-      while (chosen.length < 6) {
-        const card = pool[Math.floor(Math.random() * pool.length)];
-        if (!card) break;
+      while (chosen.length < 6 && pool.length) {
+        const idx = Math.floor(Math.random() * pool.length);
+        const card = pool.splice(idx, 1)[0];
         chosen.push({
-          id: card.id,
+          id: String(card.id),
           name: card.name,
-          atk: card.atk ?? 1200,
-          def: card.def ?? 1200,
-          type: card.type || '通常'
+          power: Number(card.power) || 0,
+          type: card.type || 'カード'
         });
       }
       return chosen;
@@ -579,14 +628,13 @@
       state.battle.turn = 1;
       state.battle.playerLife = 8000;
       state.battle.aiLife = 8000;
-      state.battle.logs = [];
       document.getElementById('battleLog').innerHTML = '';
 
       const aiDeck = buildAiDeck();
       state.aiDeck = aiDeck;
 
       addLog('AIがデッキを選択しました。対戦開始！');
-      addLog('デッキの強さを比較して、ターンを進めます。');
+      addLog('カードのパワーを比較して、ターンを進めます。');
       updateBattleHud();
     }
 
@@ -596,11 +644,11 @@
         return;
       }
 
-      const playerCard = state.deck[Math.floor(Math.random() * state.deck.length)] || { name: 'プレイヤーのカード', atk: 1200 };
-      const aiCard = (state.aiDeck || []).sort((a, b) => (b.atk || 0) - (a.atk || 0))[0] || { name: 'AIカード', atk: 1200 };
+      const playerCard = state.deck[Math.floor(Math.random() * state.deck.length)] || { name: 'プレイヤーのカード', power: 1200 };
+      const aiCard = (state.aiDeck || []).sort((a, b) => (Number(b.power) || 0) - (Number(a.power) || 0))[0] || { name: 'AIカード', power: 1200 };
 
-      const playerPower = Number(playerCard.atk) || 1200;
-      const aiPower = Number(aiCard.atk) || 1200;
+      const playerPower = Number(playerCard.power) || 1200;
+      const aiPower = Number(aiCard.power) || 1200;
 
       let playerDamage = 0;
       let aiDamage = 0;
@@ -637,18 +685,27 @@
 
     async function loadCards() {
       try {
-        const response = await fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0');
-        const data = await response.json();
-        state.cards = (data && data.data) ? data.data : [];
+        const response = await fetch('./data/cards.json', { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error(`カードデータの取得に失敗しました: ${response.status}`);
+        }
+
+        const payload = await response.json();
+        const source = Array.isArray(payload)
+          ? payload
+          : (payload.cards || payload.data || []);
+
+        state.cards = source.map(normalizeCard);
       } catch (error) {
+        console.error(error);
         state.cards = [
-          { id: 1, name: '青眼の白龍', type: 'ドラゴン', atk: 3000, def: 2500 },
-          { id: 2, name: 'ブラック・マジシャン', type: '魔法使い', atk: 2500, def: 2100 },
-          { id: 3, name: 'サンダー・ドラゴン', type: 'ドラゴン', atk: 2400, def: 2000 },
-          { id: 4, name: 'スライム', type: '水', atk: 800, def: 1000 },
-          { id: 5, name: '魔法の兵士', type: '戦士', atk: 1400, def: 1200 }
+          { id: 'dm-sample-1', name: 'ガッツドラゴン', type: 'クリーチャー', civilization: ['火'], cost: 5, power: 5000, race: ['ドラゴン'], text: '攻撃時、カードを1枚引く。', image: '' },
+          { id: 'dm-sample-2', name: '深海の守護者', type: 'クリーチャー', civilization: ['水'], cost: 4, power: 4000, race: ['海竜'], text: '自分のターン開始時、1枚回復する。', image: '' },
+          { id: 'dm-sample-3', name: '雷鳴の騎士', type: 'クリーチャー', civilization: ['自然'], cost: 5, power: 4500, race: ['騎士'], text: '相手のクリーチャー1体に2000ダメージ。', image: '' },
+          { id: 'dm-sample-4', name: '祝福の炎', type: '呪文', civilization: ['火'], cost: 2, power: 0, race: [], text: '相手に2000ダメージを与える。', image: '' }
         ];
       }
+
       renderCardGrid();
       renderDeckList();
     }
