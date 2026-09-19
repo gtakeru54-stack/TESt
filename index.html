@@ -3,586 +3,659 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hydroneer Style Factory</title>
+  <title>Deck Duel</title>
   <style>
     :root {
-      --bg: #08131f;
-      --panel: #122137;
-      --panel2: #172b45;
-      --text: #edf7ff;
-      --muted: #9db9d5;
-      --line: #2f4d6b;
+      --bg1: #101826;
+      --bg2: #18263d;
+      --panel: #111d2e;
+      --panel-alt: #172b42;
+      --line: #2d4668;
+      --text: #ecf5ff;
+      --muted: #9ab4cf;
       --blue: #69c7ff;
-      --green: #6ae8b0;
-      --gold: #ffd166;
-      --amber: #f6b86d;
-      --pink: #d4a0ff;
-      --red: #ff7f7f;
-      --shadow: rgba(0,0,0,0.45);
+      --blue2: #3ca5ff;
+      --green: #7ce8b0;
+      --orange: #ffb86d;
+      --red: #ff7878;
+      --purple: #d7a8ff;
+      --gold: #ffd36a;
+      --shadow: rgba(0, 0, 0, 0.45);
     }
 
     * { box-sizing: border-box; }
     html, body {
-      margin: 0; min-height: 100%;
-      background: radial-gradient(circle at top, #17375d, #08131f 60%);
-      color: var(--text); font-family: system-ui, sans-serif;
+      margin: 0;
+      min-height: 100%;
+      background: linear-gradient(180deg, #0f1a2d, #0a0f18 65%);
+      color: var(--text);
+      font-family: system-ui, sans-serif;
     }
-    body { padding: 12px; }
-    .app {
-      min-width: 1100px; width: min(1500px, 100%); margin: auto;
-      display: grid; grid-template-columns: 220px minmax(620px, 1fr) 280px; gap: 12px;
-      padding: 12px; border-radius: 16px; background: rgba(8, 19, 31, 0.92);
-      border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 22px 60px var(--shadow);
-    }
-    .column { display: flex; flex-direction: column; gap: 12px; }
-    .panel {
-      background: linear-gradient(180deg, var(--panel2), var(--panel));
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 11px; padding: 12px;
-    }
-    .logo { font-weight: 900; letter-spacing: .08em; color: #80d5ff; }
-    .sub, .hint { font-size: 11px; color: var(--muted); line-height: 1.6; }
-    .title { margin: 0 0 10px; color: var(--blue); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
 
-    .tools { display: flex; flex-direction: column; gap: 7px; }
-    .tool {
-      width: 100%; display: flex; align-items: center; gap: 9px; text-align: left;
-      padding: 9px; border-radius: 8px; border: 1px solid var(--line); background: #0b1728; color: var(--text);
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 10px;
+    }
+
+    .phone {
+      width: min(420px, 100vw - 10px);
+      min-height: calc(100vh - 16px);
+      background: linear-gradient(180deg, var(--bg2), var(--bg1));
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: rgba(8, 14, 21, 0.65);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: var(--blue);
+    }
+
+    .tiny {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .screen {
+      flex: 1;
+      overflow: auto;
+      padding: 12px 12px 76px;
+    }
+
+    .section {
+      display: none;
+      gap: 12px;
+      flex-direction: column;
+    }
+
+    .section.active {
+      display: flex;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--panel-alt), var(--panel));
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .home-empty {
+      min-height: 220px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed rgba(255,255,255,.14);
+      border-radius: 12px;
+      background: rgba(255,255,255,.02);
+    }
+
+    .deck-top {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .search {
+      flex: 1;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 10px;
+      height: 42px;
+      color: var(--text);
+      padding: 0 12px;
+      font-size: 15px;
+    }
+
+    .small-btn {
+      height: 42px;
+      border: 0;
+      border-radius: 10px;
+      padding: 0 12px;
+      background: linear-gradient(180deg, var(--blue2), #1f69d4);
+      color: var(--text);
+      font-weight: 800;
       cursor: pointer;
     }
-    .tool.active {
-      border-color: var(--green); background: #16374a; box-shadow: inset 0 0 0 1px rgba(106,232,176,.3);
-    }
-    .tool-icon {
-      width: 32px; height: 32px; border-radius: 7px; display: grid; place-items: center;
-      font-weight: 900; color: #07131f; flex: 0 0 auto;
-    }
-    .tool-name { font-size: 12px; font-weight: 800; }
-    .tool-cost { font-size: 10px; color: var(--muted); margin-top: 2px; }
 
-    .board-head {
-      height: 34px; display: flex; align-items: center; gap: 7px; margin: 2px 2px 9px;
-    }
-    .badge {
-      display: inline-block; padding: 5px 9px; border-radius: 999px; font-size: 11px;
-      background: rgba(87,181,255,.12); color: #a9dcff; border: 1px solid rgba(87,181,255,.25);
-    }
-    .badge.gold { color: var(--gold); background: rgba(255, 209, 102, 0.12); border-color: rgba(255,209,102,.25); }
-    .badge.green { color: var(--green); background: rgba(106,232,176,0.12); border-color: rgba(106,232,176,.25); }
-
-    canvas {
-      display: block; width: 100%; height: auto; border: 2px solid rgba(255,255,255,0.12);
-      border-radius: 10px; background: #091522; cursor: crosshair;
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
     }
 
-    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
-    .stat {
-      padding: 7px; border-radius: 8px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08);
+    .mini-card {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      padding: 10px;
     }
-    .stat label { display: block; font-size: 10px; color: var(--muted); }
-    .stat b { font-size: 17px; }
 
-    .info { font-size: 12px; line-height: 1.7; color: var(--muted); min-height: 75px; }
-    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
-    button {
-      border: 0; border-radius: 8px; padding: 9px; font-weight: 800; cursor: pointer; color: var(--text);
-      background: linear-gradient(#3d9cf0, #2166c7);
+    .mini-card h4 {
+      margin: 0 0 6px;
+      font-size: 13px;
+      line-height: 1.3;
     }
-    button:hover { filter: brightness(1.08); }
-    button.secondary { background: #20324a; border: 1px solid rgba(255,255,255,.13); }
-    button:disabled { opacity: .45; cursor: not-allowed; }
 
-    .skills { display: flex; flex-direction: column; gap: 7px; }
-    .skill {
-      display: flex; align-items: center; gap: 7px; padding: 7px; border-radius: 8px;
-      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08);
+    .mini-meta {
+      color: var(--muted);
+      font-size: 10px;
+      margin-bottom: 8px;
     }
-    .skill div { flex: 1; }
-    .skill strong { font-size: 11px; }
-    .skill small { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; }
-    .skill button { padding: 6px; font-size: 10px; min-width: 54px; }
 
-    .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 10px; color: var(--muted); }
-    .legend i { display: inline-block; width: 9px; height: 9px; margin-right: 4px; border-radius: 2px; background: var(--c); }
-    .log {
-      height: 74px; overflow: auto; padding-top: 7px; border-top: 1px solid rgba(255,255,255,.08);
-      font-size: 10px; color: #b7d0ea;
+    .mini-card button {
+      width: 100%;
+      border: 0;
+      border-radius: 8px;
+      height: 32px;
+      font-weight: 800;
+      background: linear-gradient(180deg, #42a6ff, #2367ca);
+      color: var(--text);
+      cursor: pointer;
     }
-    .log div { margin-bottom: 3px; }
+
+    .deck-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 260px;
+      overflow: auto;
+    }
+
+    .deck-item {
+      background: rgba(255,255,255,.02);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 10px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .deck-item-name {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .deck-item-sub {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .deck-item button {
+      border: 0;
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 6px 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .battle-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .battle-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+    }
+
+    .life-box {
+      flex: 1;
+      background: rgba(255,255,255,.02);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .life-box strong {
+      display: block;
+      font-size: 24px;
+      margin-top: 4px;
+    }
+
+    .turn-card {
+      padding: 12px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+    }
+
+    .battle-log {
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .battle-log .line {
+      background: rgba(255,255,255,.02);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 8px;
+      padding: 8px 10px;
+      line-height: 1.5;
+    }
+
+    .battle-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .battle-actions button {
+      flex: 1;
+      height: 42px;
+      border: 0;
+      border-radius: 10px;
+      background: linear-gradient(180deg, #2fb57d, #1f7d5f);
+      color: var(--text);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .battle-actions button.secondary {
+      background: linear-gradient(180deg, #ef8e5c, #c6683d);
+    }
+
+    .bottom-nav {
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: rgba(10, 18, 28, 0.92);
+      border-top: 1px solid rgba(255,255,255,.08);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-btn {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-btn.active {
+      color: var(--text);
+      background: rgba(105, 199, 255, 0.09);
+    }
+
+    @media (max-width: 420px) {
+      body { padding: 0; }
+      .phone {
+        width: 100vw;
+        min-height: 100vh;
+        border-radius: 0;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="app">
-    <aside class="column">
-      <section class="panel">
-        <div class="logo">HYDRONEER</div>
-        <div class="sub">排水と圧力で掘る工場設計</div>
-      </section>
+  <div class="phone">
+    <header class="topbar">
+      <div class="brand">DUEL</div>
+      <div class="tiny">battle app</div>
+    </header>
 
-      <section class="panel">
-        <h2 class="title">設置機械</h2>
-        <div class="tools" id="tools"></div>
-        <div class="hint" style="margin-top: 9px;">1〜4キーで選択し、マップをクリック。ドリルは資源の横に置かないと掘れない。ベルトはドリルとチェストの間に置く。</div>
-      </section>
-
-      <section class="panel">
-        <h2 class="title">ゲームの流れ</h2>
-        <div class="hint">
-          水源にポンプを置いて圧力を作る。ドリルを圧力が残る位置に置いて、資源ノードの横で掘る。ベルトで運搬、チェストで保管。水圧と配置が工場の強さを決める。
+    <main class="screen">
+      <section id="homeTab" class="section active">
+        <div class="card home-empty">
+          <div>
+            <div class="tiny" style="margin-bottom:8px;">HOME</div>
+            <div style="font-size:18px; font-weight:800;">デュエルの準備をしよう</div>
+          </div>
         </div>
       </section>
 
-      <section class="panel">
-        <h2 class="title">凡例</h2>
-        <div class="legend">
-          <span><i style="--c:#2d9ee8"></i>水源</span>
-          <span><i style="--c:#f5c45c"></i>鉄層</span>
-          <span><i style="--c:#ffd166"></i>銅層</span>
-          <span><i style="--c:#d4a0ff"></i>石英層</span>
+      <section id="deckTab" class="section">
+        <div class="card">
+          <div class="deck-top">
+            <input id="cardSearch" class="search" placeholder="カードを検索" />
+            <button class="small-btn" id="refreshCards">更新</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="tiny" style="margin-bottom:10px;">カード一覧</div>
+          <div id="cardGrid" class="mini-grid"></div>
+        </div>
+
+        <div class="card">
+          <div class="tiny" style="margin-bottom:10px;">現在のデッキ <span id="deckCount">0 / 60</span></div>
+          <div id="deckList" class="deck-list"></div>
         </div>
       </section>
-    </aside>
 
-    <main class="column">
-      <div class="board-head">
-        <span class="badge green" id="cycle">CYCLE 1</span>
-        <span class="badge gold" id="goal">目標 1,000</span>
-        <span class="badge" id="selected">選択: ドリル</span>
-      </div>
-      <canvas id="world" width="1100" height="650"></canvas>
+      <section id="battleTab" class="section">
+        <div class="card battle-wrap">
+          <div class="battle-header">
+            <div class="life-box">
+              <div class="tiny">PLAYER</div>
+              <strong id="playerLife">8000</strong>
+            </div>
+            <div class="life-box">
+              <div class="tiny">AI</div>
+              <strong id="aiLife">8000</strong>
+            </div>
+          </div>
+
+          <div class="turn-card">
+            <div class="tiny" style="margin-bottom:6px;">ターン</div>
+            <div style="font-size:24px; font-weight:900;" id="turnLabel">1</div>
+          </div>
+
+          <div class="card" style="padding:10px;">
+            <div class="tiny" style="margin-bottom:8px;">バトルログ</div>
+            <div id="battleLog" class="battle-log"></div>
+          </div>
+
+          <div class="battle-actions">
+            <button id="startBattle">対戦開始</button>
+            <button id="nextTurn" class="secondary">次ターン</button>
+          </div>
+        </div>
+      </section>
     </main>
 
-    <aside class="column">
-      <section class="panel">
-        <h2 class="title">資材</h2>
-        <div class="stats">
-          <div class="stat"><label>鉄</label><b id="iron">80</b></div>
-          <div class="stat"><label>銅</label><b id="copper">50</b></div>
-          <div class="stat"><label>石炭</label><b id="coal">0</b></div>
-          <div class="stat"><label>石英</label><b id="quartz">0</b></div>
-          <div class="stat"><label>電力</label><b id="power">0</b></div>
-          <div class="stat"><label>部品</label><b id="parts">0</b></div>
-        </div>
-      </section>
-
-      <section class="panel">
-        <h2 class="title">水圧 / 情報</h2>
-        <div class="info">
-          <div>平均水圧: <b id="pressure">0%</b></div>
-          <div>稼働中ドリル: <b id="active">0</b></div>
-          <div>発見資材: <b id="found">なし</b></div>
-          <div id="message">ポンプを水源に、ドリルを資源ノードの横に置こう。</div>
-        </div>
-        <div class="actions">
-          <button class="secondary" id="advance">次のサイクル</button>
-          <button class="secondary" id="restart">再起動</button>
-        </div>
-      </section>
-
-      <section class="panel">
-        <h2 class="title">スキルツリー</h2>
-        <div class="skills" id="skills"></div>
-      </section>
-
-      <section class="panel">
-        <h2 class="title">ログ</h2>
-        <div class="log" id="log"></div>
-      </section>
-    </aside>
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-tab="home">ホーム</button>
+      <button class="nav-btn" data-tab="deck">デッキ</button>
+      <button class="nav-btn" data-tab="battle">対戦</button>
+    </nav>
   </div>
 
   <script>
-    const cv = document.getElementById('world');
-    const ctx = cv.getContext('2d');
-    const CELL = 50;
-    const COLS = 22;
-    const ROWS = 13;
-    const W = 1100;
-    const H = 650;
-
-    const machines = {
-      drill: { name: 'ドリル', key: '1', color: '#61b6ff', cost: { iron: 20, copper: 10 }, desc: '資源ノードの横に置いて掘削する' },
-      pump: { name: 'ポンプ', key: '2', color: '#65e6a5', cost: { iron: 28, copper: 16 }, desc: '水源に置いて圧力を発生させる' },
-      belt: { name: 'ベルト', key: '3', color: '#f6a85b', cost: { iron: 12, copper: 6 }, desc: 'ドリルとチェストの間に置いて資源を運ぶ' },
-      chest: { name: 'チェスト', key: '4', color: '#d899ff', cost: { iron: 18, copper: 10 }, desc: '掘った資源を保管する' }
-    };
-
-    const skillDefs = [
-      ['pressure', '高圧ポンプ', '水圧の減衰を軽減', 1],
-      ['drill', '超硬ドリル', 'ドリル効率 +30%', 1],
-      ['belt', '高速ベルト', '搬送効率 +25%', 1],
-      ['luck', '地質解析', 'レア資材出現率 +12%', 2],
-      ['efficiency', '節水機構', '全ドリル効率 +20%', 2],
-      ['master', '工場主任', 'サイクル報酬アップ', 3]
-    ];
-
     const state = {
-      res: { iron: 80, copper: 50, coal: 0, quartz: 0, power: 0, parts: 0 },
-      cycle: 1,
-      score: 0,
-      prestige: 0,
-      sp: 0,
-      selected: 'drill',
-      skills: {},
-      buildings: [],
-      mouse: { x: 0, y: 0, over: false },
-      water: [
-        { x: 0, y: 5 }, { x: 1, y: 5 }, { x: 2, y: 5 }, { x: 3, y: 5 }, { x: 4, y: 5 },
-        { x: 5, y: 5 }, { x: 6, y: 5 }, { x: 7, y: 5 }, { x: 8, y: 5 }, { x: 9, y: 5 },
-        { x: 10, y: 5 }, { x: 11, y: 5 }, { x: 12, y: 5 }, { x: 13, y: 5 }, { x: 14, y: 5 },
-        { x: 15, y: 5 }, { x: 16, y: 5 }, { x: 17, y: 5 }, { x: 18, y: 5 }, { x: 19, y: 5 },
-        { x: 20, y: 5 }, { x: 21, y: 5 }, { x: 16, y: 4 }, { x: 16, y: 6 }, { x: 17, y: 4 }, { x: 17, y: 6 }
-      ],
-      ore: [
-        { x: 3, y: 2, amount: 30, kind: 'iron' },
-        { x: 5, y: 9, amount: 35, kind: 'iron' },
-        { x: 9, y: 3, amount: 28, kind: 'copper' },
-        { x: 14, y: 8, amount: 30, kind: 'copper' },
-        { x: 18, y: 2, amount: 24, kind: 'coal' },
-        { x: 20, y: 10, amount: 26, kind: 'coal' },
-        { x: 8, y: 11, amount: 20, kind: 'quartz' },
-        { x: 12, y: 6, amount: 22, kind: 'quartz' }
+      activeTab: 'home',
+      cards: [],
+      deck: [],
+      battle: {
+        running: false,
+        turn: 1,
+        playerLife: 8000,
+        aiLife: 8000,
+        logs: []
+      },
+      aiDecks: [
+        ['青眼の白龍', '黒魔術の儀式', 'ブラック・マジシャン', 'スライム', 'サンダー・ドラゴン'],
+        ['サイバー・ドラゴン', 'マジック・キャンサー', 'ファイアー・ボール', '真紅眼の黒龍', '闇のデッキ'],
+        ['海皇の咆哮', '白き森の妖精', 'レッド・デーモン', '破壊剣', 'ライトニング・ドラゴン']
       ]
     };
 
-    function fmt(n) { return Math.floor(n).toLocaleString('ja-JP'); }
-    function log(msg) {
-      const box = document.getElementById('log');
-      box.innerHTML = '<div>› ' + msg + '</div>' + box.innerHTML;
-    }
-    function say(msg) { document.getElementById('message').textContent = msg; }
-    function owned(id) { return !!state.skills[id]; }
-    function canAfford(cost) {
-      return Object.keys(cost).every(k => (state.res[k] || 0) >= cost[k]);
-    }
-    function pay(cost) {
-      Object.keys(cost).forEach(k => state.res[k] -= cost[k]);
-    }
-    function hasWater(x, y) {
-      return state.water.some(w => w.x === x && w.y === y);
+    const navButtons = document.querySelectorAll('.nav-btn');
+    const sections = {
+      home: document.getElementById('homeTab'),
+      deck: document.getElementById('deckTab'),
+      battle: document.getElementById('battleTab')
+    };
+
+    function setTab(tab) {
+      state.activeTab = tab;
+      navButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tab);
+      });
+      Object.entries(sections).forEach(([name, el]) => {
+        el.classList.toggle('active', name === tab);
+      });
     }
 
-    function renderTools() {
-      const box = document.getElementById('tools');
-      box.innerHTML = '';
-      Object.entries(machines).forEach(([id, m]) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'tool' + (state.selected === id ? ' active' : '');
-        btn.innerHTML = `
-          <span class="tool-icon" style="background:${m.color}">${m.key}</span>
-          <span>
-            <div class="tool-name">${m.name}</div>
-            <div class="tool-cost">鉄 ${m.cost.iron} / 銅 ${m.cost.copper}</div>
-          </span>
+    navButtons.forEach(btn => {
+      btn.addEventListener('click', () => setTab(btn.dataset.tab));
+    });
+
+    function getSearchText() {
+      return document.getElementById('cardSearch').value.trim().toLowerCase();
+    }
+
+    function cardMatches(card, keyword) {
+      if (!keyword) return true;
+      const name = (card.name || '').toLowerCase();
+      const type = (card.type || '').toLowerCase();
+      return name.includes(keyword) || type.includes(keyword);
+    }
+
+    function renderCardGrid() {
+      const grid = document.getElementById('cardGrid');
+      const q = getSearchText();
+      const filtered = state.cards.filter(card => cardMatches(card, q)).slice(0, 20);
+
+      if (!filtered.length) {
+        grid.innerHTML = '<div class="mini-card"><h4>カードが見つかりません</h4><div class="mini-meta">検索条件を変えてみてください</div></div>';
+        return;
+      }
+
+      grid.innerHTML = filtered.map(card => {
+        const already = state.deck.some(item => item.id === card.id);
+        const atk = card.atk ?? '—';
+        const def = card.def ?? '—';
+        return `
+          <div class="mini-card">
+            <h4>${card.name}</h4>
+            <div class="mini-meta">${card.type || 'カード'} / ATK ${atk} / DEF ${def}</div>
+            <button data-add="${card.id}" ${already ? 'disabled' : ''}>${already ? '追加済み' : '追加'}</button>
+          </div>
         `;
-        btn.onclick = () => selectMachine(id);
-        box.appendChild(btn);
+      }).join('');
+
+      grid.querySelectorAll('[data-add]').forEach(button => {
+        button.addEventListener('click', () => addToDeck(Number(button.dataset.add)));
       });
     }
 
-    function selectMachine(id) {
-      state.selected = id;
-      document.getElementById('selected').textContent = '選択: ' + machines[id].name;
-      document.getElementById('message').textContent = machines[id].desc + '。';
-      renderTools();
-    }
-
-    function nearestPumpDistance(x, y) {
-      const pumps = state.buildings.filter(b => b.type === 'pump');
-      if (!pumps.length) return Infinity;
-      let best = Infinity;
-      for (const p of pumps) {
-        const d = Math.abs(p.x - x) + Math.abs(p.y - y);
-        if (d < best) best = d;
-      }
-      return best;
-    }
-
-    function pressureAt(x, y) {
-      const d = nearestPumpDistance(x, y);
-      if (!Number.isFinite(d)) return 0;
-      // ドリルは水辺/水源の近くで生きる。離れると圧力が落ちる。
-      const nearWater = hasWater(x, y) || state.water.some(w => Math.abs(w.x - x) + Math.abs(w.y - y) === 1);
-      if (!nearWater) return 0;
-      let p = Math.max(0, 1 - d * 0.17);
-      if (owned('pressure')) p += 0.15;
-      return Math.min(1, Math.max(0, p));
-    }
-
-    function resourceNodeNearDrill(x, y) {
-      return state.ore.find(node => Math.abs(node.x - x) <= 1 && Math.abs(node.y - y) <= 1 && node.amount > 0);
-    }
-
-    function placeBuilding(x, y) {
-      const type = state.selected;
-      const info = machines[type];
-
-      if (state.buildings.some(b => b.x === x && b.y === y)) {
-        say('そのマスには既に機械があります。');
+    function addToDeck(cardId) {
+      if (state.deck.length >= 60) {
+        alert('デッキは60枚までです。');
         return;
       }
-      if (type === 'pump' && !hasWater(x, y)) {
-        say('ポンプは水源に置いてください。');
-        return;
-      }
-      if (type === 'drill' && hasWater(x, y)) {
-        say('ドリルは陸地に置いてください。');
-        return;
-      }
-      if (!canAfford(info.cost)) {
-        say('必要な資材が足りません。');
-        return;
-      }
-
-      pay(info.cost);
-      state.buildings.push({ type, x, y, cd: 0 });
-      log(info.name + 'を設置');
-      say(info.name + ' を設置しました。');
-      updateUI();
-      draw();
-    }
-
-    function drillLogic() {
-      let active = 0;
-      let totalPressure = 0;
-
-      state.buildings.forEach(b => {
-        if (b.type !== 'drill') return;
-        const p = pressureAt(b.x, b.y);
-        const node = resourceNodeNearDrill(b.x, b.y);
-        if (!node || p <= 0) return;
-
-        const boost = owned('drill') ? 1.3 : 1;
-        const eff = owned('efficiency') ? 1.2 : 1;
-        const chance = Math.min(1, p * 0.9 * boost * eff);
-
-        if (Math.random() < chance) {
-          const typeName = node.kind;
-          state.res[typeName] += 1 + (owned('drill') ? 1 : 0);
-          node.amount -= 1;
-          state.score += 12;
-          active += 1;
-          totalPressure += p;
-        }
+      const card = state.cards.find(item => item.id === cardId);
+      if (!card) return;
+      state.deck.push({
+        id: card.id,
+        name: card.name,
+        type: card.type,
+        atk: card.atk ?? 0,
+        def: card.def ?? 0,
+        level: card.level ?? 0,
+        image: card.card_images?.[0]?.image_url_small || ''
       });
-
-      const avg = active ? totalPressure / active : 0;
-      document.getElementById('pressure').textContent = Math.round(avg * 100) + '%';
-      document.getElementById('active').textContent = active;
-
-      const found = Object.entries(state.res)
-        .filter(([k, v]) => ['coal', 'quartz'].includes(k) && v > 0)
-        .map(([k]) => k === 'coal' ? '石炭' : '石英')
-        .join('・');
-      document.getElementById('found').textContent = found || 'なし';
+      renderDeckList();
+      renderCardGrid();
     }
 
-    function tick() {
-      state.buildings.forEach(b => {
-        if (b.type === 'pump') {
-          state.res.power += 2 + (owned('pressure') ? 1 : 0);
-          b.cd = 18;
-        }
+    function removeFromDeck(cardId) {
+      state.deck = state.deck.filter(item => item.id !== cardId);
+      renderDeckList();
+      renderCardGrid();
+    }
 
-        if (b.type === 'belt') {
-          state.score += 1;
-          state.res.parts += owned('belt') ? 0.15 : 0.05;
-          b.cd = 20;
-        }
+    function renderDeckList() {
+      const list = document.getElementById('deckList');
+      const count = document.getElementById('deckCount');
+      count.textContent = `${state.deck.length} / 60`;
 
-        if (b.type === 'chest') {
-          state.res.parts += 0.2;
-          b.cd = 28;
-        }
+      if (!state.deck.length) {
+        list.innerHTML = '<div class="deck-item"><div><div class="deck-item-name">デッキが空です</div><div class="deck-item-sub">カードを追加して作成</div></div></div>';
+        return;
+      }
+
+      list.innerHTML = state.deck.map(card => `
+        <div class="deck-item">
+          <div>
+            <div class="deck-item-name">${card.name}</div>
+            <div class="deck-item-sub">${card.type} / ATK ${card.atk}</div>
+          </div>
+          <button data-remove="${card.id}">削除</button>
+        </div>
+      `).join('');
+
+      list.querySelectorAll('[data-remove]').forEach(button => {
+        button.addEventListener('click', () => removeFromDeck(Number(button.dataset.remove)));
       });
+    }
 
-      if (state.buildings.some(b => b.type === 'drill')) {
-        drillLogic();
+    function buildAiDeck() {
+      if (!state.cards.length) {
+        return [
+          { id: 1, name: '青眼の白龍', atk: 3000, def: 2500, type: 'ドラゴン' },
+          { id: 2, name: 'ブラック・マジシャン', atk: 2500, def: 2100, type: '魔法使い' },
+          { id: 3, name: 'サンダー・ドラゴン', atk: 2400, def: 2000, type: 'ドラゴン' },
+          { id: 4, name: 'スライム', atk: 800, def: 1000, type: '水' }
+        ];
+      }
+      const pool = state.cards.slice();
+      const chosen = [];
+      while (chosen.length < 6) {
+        const card = pool[Math.floor(Math.random() * pool.length)];
+        if (!card) break;
+        chosen.push({
+          id: card.id,
+          name: card.name,
+          atk: card.atk ?? 1200,
+          def: card.def ?? 1200,
+          type: card.type || '通常'
+        });
+      }
+      return chosen;
+    }
+
+    function addLog(text) {
+      const logBox = document.getElementById('battleLog');
+      const line = document.createElement('div');
+      line.className = 'line';
+      line.textContent = text;
+      logBox.prepend(line);
+    }
+
+    function updateBattleHud() {
+      document.getElementById('playerLife').textContent = state.battle.playerLife;
+      document.getElementById('aiLife').textContent = state.battle.aiLife;
+      document.getElementById('turnLabel').textContent = state.battle.turn;
+    }
+
+    function startBattle() {
+      if (!state.deck.length) {
+        alert('デッキを先に作成してください。');
+        setTab('deck');
+        return;
+      }
+
+      state.battle.running = true;
+      state.battle.turn = 1;
+      state.battle.playerLife = 8000;
+      state.battle.aiLife = 8000;
+      state.battle.logs = [];
+      document.getElementById('battleLog').innerHTML = '';
+
+      const aiDeck = buildAiDeck();
+      state.aiDeck = aiDeck;
+
+      addLog('AIがデッキを選択しました。対戦開始！');
+      addLog('デッキの強さを比較して、ターンを進めます。');
+      updateBattleHud();
+    }
+
+    function takeTurn() {
+      if (!state.battle.running) {
+        addLog('まず対戦開始を押して、デッキを選択してください。');
+        return;
+      }
+
+      const playerCard = state.deck[Math.floor(Math.random() * state.deck.length)] || { name: 'プレイヤーのカード', atk: 1200 };
+      const aiCard = (state.aiDeck || []).sort((a, b) => (b.atk || 0) - (a.atk || 0))[0] || { name: 'AIカード', atk: 1200 };
+
+      const playerPower = Number(playerCard.atk) || 1200;
+      const aiPower = Number(aiCard.atk) || 1200;
+
+      let playerDamage = 0;
+      let aiDamage = 0;
+
+      if (playerPower >= aiPower) {
+        aiDamage = playerPower - aiPower + 300;
+        state.battle.aiLife = Math.max(0, state.battle.aiLife - aiDamage);
       } else {
-        document.getElementById('pressure').textContent = '0%';
-        document.getElementById('active').textContent = '0';
-        document.getElementById('found').textContent = 'なし';
+        playerDamage = aiPower - playerPower + 300;
+        state.battle.playerLife = Math.max(0, state.battle.playerLife - playerDamage);
       }
 
-      const powerDrain = state.buildings.filter(b => b.type !== 'pump').length * 0.02;
-      state.res.power = Math.max(0, state.res.power - powerDrain);
-      updateUI();
-    }
+      addLog(`ターン ${state.battle.turn}: ${playerCard.name} (${playerPower}) vs ${aiCard.name} (${aiPower})`);
+      addLog(`${playerDamage ? 'AIが' + playerDamage + 'ダメージ' : 'プレイヤーが' + aiDamage + 'ダメージ'}を与えました。`);
+      addLog(`PLAYER ${state.battle.playerLife} / AI ${state.battle.aiLife}`);
 
-    function renderSkills() {
-      const box = document.getElementById('skills');
-      box.innerHTML = '';
-      skillDefs.forEach(([id, name, desc, cost]) => {
-        const row = document.createElement('div');
-        row.className = 'skill';
+      state.battle.turn += 1;
+      updateBattleHud();
 
-        const info = document.createElement('div');
-        info.innerHTML = `<strong>${name}</strong><small>${desc}</small>`;
-
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.textContent = owned(id) ? '取得済' : cost + ' SP';
-        btn.disabled = owned(id) || state.sp < cost;
-        btn.onclick = () => {
-          if (state.sp < cost) return;
-          state.sp -= cost;
-          state.skills[id] = true;
-          say(name + ' を取得した。');
-          log(name + 'を取得');
-          updateUI();
-        };
-
-        row.appendChild(info);
-        row.appendChild(btn);
-        box.appendChild(row);
-      });
-    }
-
-    function updateUI() {
-      const keys = ['iron', 'copper', 'coal', 'quartz', 'power', 'parts'];
-      keys.forEach(k => document.getElementById(k).textContent = fmt(state.res[k]));
-      document.getElementById('cycle').textContent = 'CYCLE ' + state.cycle;
-      document.getElementById('goal').textContent = '目標 ' + fmt(1000 + state.prestige * 300);
-      document.getElementById('selected').textContent = '選択: ' + machines[state.selected].name;
-      renderTools();
-      renderSkills();
-    }
-
-    function advanceCycle() {
-      state.cycle += 1;
-      state.sp += 1 + (owned('master') ? 1 : 0);
-      state.score += 100 + state.cycle * 20 + (owned('master') ? 150 : 0);
-      say('次のサイクルへ。スキルポイントを獲得した。');
-      log('サイクル ' + state.cycle + ' 開始');
-      updateUI();
-    }
-
-    function restartGame() {
-      const gain = Math.max(1, Math.floor(state.score / 500));
-      state.prestige += gain;
-      state.cycle = 1;
-      state.score = 0;
-      state.res = { iron: 80 + state.prestige * 15, copper: 50 + state.prestige * 8, coal: 0, quartz: 0, power: 0, parts: 0 };
-      state.buildings = [];
-      say('工場を再起動。威信 +' + gain + '。');
-      log('再起動: 威信 +' + gain);
-      updateUI();
-      draw();
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, W, H);
-      for (let y = 0; y < ROWS; y++) {
-        for (let x = 0; x < COLS; x++) {
-          const water = hasWater(x, y);
-          ctx.fillStyle = water ? '#155b88' : ((x + y) % 2 ? '#142a3d' : '#172f46');
-          ctx.fillRect(x * CELL, y * CELL, CELL, CELL);
-          ctx.strokeStyle = water ? 'rgba(85, 201, 255, 0.25)' : 'rgba(255,255,255,0.07)';
-          ctx.strokeRect(x * CELL, y * CELL, CELL, CELL);
-          if (water) {
-            ctx.fillStyle = 'rgba(82,201,255,0.6)';
-            ctx.fillRect(x * CELL + 7, y * CELL + 22, 36, 3);
-          }
-        }
+      if (state.battle.playerLife <= 0) {
+        addLog('AIの勝利です。');
+        state.battle.running = false;
       }
-
-      // 資源ノード
-      for (const node of state.ore) {
-        if (node.amount <= 0) continue;
-        const color = node.kind === 'iron' ? '#f5c45c' : node.kind === 'copper' ? '#ffd166' : node.kind === 'coal' ? '#9aa9ba' : '#d4a0ff';
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(node.x * CELL + 25, node.y * CELL + 25, 13, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#351d00';
-        ctx.font = 'bold 11px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('?', node.x * CELL + 25, node.y * CELL + 29);
-      }
-
-      state.buildings.forEach(b => {
-        const m = machines[b.type];
-        const x = b.x * CELL + 5;
-        const y = b.y * CELL + 5;
-        ctx.fillStyle = m.color;
-        ctx.fillRect(x, y, 40, 40);
-        ctx.fillStyle = '#07111f';
-        ctx.font = 'bold 17px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(m.key, x + 20, y + 27);
-
-        if (b.type === 'drill') {
-          const p = pressureAt(b.x, b.y);
-          ctx.fillStyle = 'rgba(7,17,31,0.8)';
-          ctx.fillRect(x, y + 34, 40, 6);
-          ctx.fillStyle = p > 0.65 ? '#63e6a4' : p > 0.3 ? '#ffd166' : '#ff7676';
-          ctx.fillRect(x, y + 34, 40 * p, 6);
-        }
-
-        if (b.type === 'belt') {
-          ctx.strokeStyle = '#ffbf69';
-          ctx.lineWidth = 4;
-          ctx.beginPath();
-          ctx.moveTo(x + 20, y + 40);
-          ctx.lineTo(x + 20, y + 60);
-          ctx.moveTo(x + 20, y + 0);
-          ctx.lineTo(x + 20, y - 20);
-          ctx.stroke();
-        }
-      });
-
-      if (state.mouse.over) {
-        const gx = Math.floor(state.mouse.x / CELL);
-        const gy = Math.floor(state.mouse.y / CELL);
-        if (gx >= 0 && gx < COLS && gy >= 0 && gy < ROWS) {
-          ctx.strokeStyle = '#63e6a4';
-          ctx.lineWidth = 3;
-          ctx.strokeRect(gx * CELL + 2, gy * CELL + 2, CELL - 4, CELL - 4);
-          if (state.selected === 'drill') {
-            const p = pressureAt(gx, gy);
-            const node = resourceNodeNearDrill(gx, gy);
-            ctx.fillStyle = 'rgba(255,255,255,0.95)';
-            ctx.font = '11px sans-serif';
-            ctx.fillText(node ? '掘削可能' : '資源の横に置く', gx * CELL + 4, gy * CELL + 14);
-            ctx.fillText(Math.round(p * 100) + '% 水圧', gx * CELL + 4, gy * CELL + 28);
-          }
-        }
+      if (state.battle.aiLife <= 0) {
+        addLog('プレイヤーの勝利です。');
+        state.battle.running = false;
       }
     }
 
-    function mousePos(e) {
-      const rect = cv.getBoundingClientRect();
-      const x = (e.clientX - rect.left) * (W / rect.width);
-      const y = (e.clientY - rect.top) * (H / rect.height);
-      state.mouse = { x, y, over: true };
-      return { x: Math.floor(x / CELL), y: Math.floor(y / CELL) };
+    document.getElementById('cardSearch').addEventListener('input', renderCardGrid);
+    document.getElementById('refreshCards').addEventListener('click', loadCards);
+    document.getElementById('startBattle').addEventListener('click', startBattle);
+    document.getElementById('nextTurn').addEventListener('click', takeTurn);
+
+    async function loadCards() {
+      try {
+        const response = await fetch('https://db.ygoprodeck.com/api/v7/cardinfo.php?num=20&offset=0');
+        const data = await response.json();
+        state.cards = (data && data.data) ? data.data : [];
+      } catch (error) {
+        state.cards = [
+          { id: 1, name: '青眼の白龍', type: 'ドラゴン', atk: 3000, def: 2500 },
+          { id: 2, name: 'ブラック・マジシャン', type: '魔法使い', atk: 2500, def: 2100 },
+          { id: 3, name: 'サンダー・ドラゴン', type: 'ドラゴン', atk: 2400, def: 2000 },
+          { id: 4, name: 'スライム', type: '水', atk: 800, def: 1000 },
+          { id: 5, name: '魔法の兵士', type: '戦士', atk: 1400, def: 1200 }
+        ];
+      }
+      renderCardGrid();
+      renderDeckList();
     }
 
-    cv.addEventListener('mousemove', e => { mousePos(e); draw(); });
-    cv.addEventListener('mouseleave', () => { state.mouse.over = false; draw(); });
-    cv.addEventListener('click', e => {
-      const p = mousePos(e);
-      if (p.x >= 0 && p.x < COLS && p.y >= 0 && p.y < ROWS) placeBuilding(p.x, p.y);
-    });
-
-    document.addEventListener('keydown', e => {
-      const id = Object.keys(machines).find(k => machines[k].key === e.key);
-      if (id) selectMachine(id);
-      if (e.key.toLowerCase() === 'a') advanceCycle();
-      if (e.key.toLowerCase() === 'r') restartGame();
-    });
-
-    document.getElementById('advance').onclick = advanceCycle;
-    document.getElementById('restart').onclick = restartGame;
-
-    renderTools();
-    renderSkills();
-    updateUI();
-    draw();
-    setInterval(() => {
-      tick();
-      draw();
-    }, 1000);
+    setTab('home');
+    loadCards();
+    updateBattleHud();
   </script>
 </body>
 </html>
