@@ -3,74 +3,58 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Waterworks Factory</title>
+  <title>Hydroneer Style Factory</title>
   <style>
     :root {
-      --bg: #08111f;
+      --bg: #08131f;
       --panel: #122137;
       --panel2: #172b45;
-      --line: #315070;
-      --text: #eaf4ff;
-      --muted: #9db4ce;
-      --blue: #57b5ff;
-      --water: #2d9ee8;
-      --green: #63e6a4;
+      --text: #edf7ff;
+      --muted: #9db9d5;
+      --line: #2f4d6b;
+      --blue: #69c7ff;
+      --green: #6ae8b0;
       --gold: #ffd166;
-      --red: #ff7676;
-      --pink: #d899ff;
-      --amber: #f6a85b;
-      --ink: #071521;
+      --amber: #f6b86d;
+      --pink: #d4a0ff;
+      --red: #ff7f7f;
+      --shadow: rgba(0,0,0,0.45);
     }
 
     * { box-sizing: border-box; }
     html, body {
-      margin: 0;
-      min-height: 100%;
-      background: radial-gradient(circle at top, #1b3b5b, #08111f 63%);
-      color: var(--text);
-      font-family: system-ui, sans-serif;
+      margin: 0; min-height: 100%;
+      background: radial-gradient(circle at top, #17375d, #08131f 60%);
+      color: var(--text); font-family: system-ui, sans-serif;
     }
-    body { padding: 12px; overflow: auto; }
-
+    body { padding: 12px; }
     .app {
-      min-width: 1100px;
-      width: min(1500px, 100%);
-      margin: auto;
-      display: grid;
-      grid-template-columns: 220px minmax(610px, 1fr) 280px;
-      gap: 12px;
-      padding: 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(9, 21, 37, 0.92);
-      box-shadow: 0 24px 70px rgba(0,0,0,.55);
+      min-width: 1100px; width: min(1500px, 100%); margin: auto;
+      display: grid; grid-template-columns: 220px minmax(620px, 1fr) 280px; gap: 12px;
+      padding: 12px; border-radius: 16px; background: rgba(8, 19, 31, 0.92);
+      border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 22px 60px var(--shadow);
     }
-
     .column { display: flex; flex-direction: column; gap: 12px; }
     .panel {
       background: linear-gradient(180deg, var(--panel2), var(--panel));
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 11px;
-      padding: 12px;
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 11px; padding: 12px;
     }
-    .logo { font-weight: 900; color: #80d5ff; letter-spacing: .08em; }
-    .sub, .hint, .small { font-size: 11px; color: var(--muted); line-height: 1.55; }
-    .title { margin: 0 0 10px; font-size: 13px; color: var(--blue); letter-spacing: .1em; text-transform: uppercase; }
+    .logo { font-weight: 900; letter-spacing: .08em; color: #80d5ff; }
+    .sub, .hint { font-size: 11px; color: var(--muted); line-height: 1.6; }
+    .title { margin: 0 0 10px; color: var(--blue); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
 
     .tools { display: flex; flex-direction: column; gap: 7px; }
     .tool {
-      display: flex; align-items: center; text-align: left; gap: 9px;
-      width: 100%; background: #0b1728; border: 1px solid var(--line);
-      padding: 9px; border-radius: 8px; cursor: pointer; color: var(--text);
+      width: 100%; display: flex; align-items: center; gap: 9px; text-align: left;
+      padding: 9px; border-radius: 8px; border: 1px solid var(--line); background: #0b1728; color: var(--text);
+      cursor: pointer;
     }
     .tool.active {
-      border-color: var(--green);
-      background: #16374a;
-      box-shadow: inset 0 0 0 1px rgba(99, 230, 164, .35);
+      border-color: var(--green); background: #16374a; box-shadow: inset 0 0 0 1px rgba(106,232,176,.3);
     }
     .tool-icon {
       width: 32px; height: 32px; border-radius: 7px; display: grid; place-items: center;
-      color: #07111f; font-weight: 900; flex: 0 0 auto;
+      font-weight: 900; color: #07131f; flex: 0 0 auto;
     }
     .tool-name { font-size: 12px; font-weight: 800; }
     .tool-cost { font-size: 10px; color: var(--muted); margin-top: 2px; }
@@ -79,35 +63,32 @@
       height: 34px; display: flex; align-items: center; gap: 7px; margin: 2px 2px 9px;
     }
     .badge {
-      display: inline-block; font-size: 11px; padding: 5px 9px; border-radius: 99px;
-      background: #123b51; border: 1px solid rgba(87, 181, 255, 0.25); color: #93dcff;
+      display: inline-block; padding: 5px 9px; border-radius: 999px; font-size: 11px;
+      background: rgba(87,181,255,.12); color: #a9dcff; border: 1px solid rgba(87,181,255,.25);
     }
-    .badge.gold { color: var(--gold); background: #493911; border-color: rgba(255, 209, 102, 0.25); }
-    .badge.green { color: var(--green); background: #123d32; border-color: rgba(99, 230, 164, 0.25); }
+    .badge.gold { color: var(--gold); background: rgba(255, 209, 102, 0.12); border-color: rgba(255,209,102,.25); }
+    .badge.green { color: var(--green); background: rgba(106,232,176,0.12); border-color: rgba(106,232,176,.25); }
 
     canvas {
-      display: block; width: 100%; height: auto; border: 2px solid rgba(255,255,255,.12);
+      display: block; width: 100%; height: auto; border: 2px solid rgba(255,255,255,0.12);
       border-radius: 10px; background: #091522; cursor: crosshair;
     }
 
     .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
     .stat {
-      background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08);
-      border-radius: 8px; padding: 7px;
+      padding: 7px; border-radius: 8px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08);
     }
-    .stat label { display: block; color: var(--muted); font-size: 10px; }
+    .stat label { display: block; font-size: 10px; color: var(--muted); }
     .stat b { font-size: 17px; }
 
     .info { font-size: 12px; line-height: 1.7; color: var(--muted); min-height: 75px; }
     .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
     button {
-      border: 0; border-radius: 8px; padding: 9px;
-      background: linear-gradient(#3d9cf0, #2166c7); color: #fff; font-weight: 800; cursor: pointer;
+      border: 0; border-radius: 8px; padding: 9px; font-weight: 800; cursor: pointer; color: var(--text);
+      background: linear-gradient(#3d9cf0, #2166c7);
     }
     button:hover { filter: brightness(1.08); }
-    button.secondary {
-      background: #20324a; border: 1px solid rgba(255,255,255,.13);
-    }
+    button.secondary { background: #20324a; border: 1px solid rgba(255,255,255,.13); }
     button:disabled { opacity: .45; cursor: not-allowed; }
 
     .skills { display: flex; flex-direction: column; gap: 7px; }
@@ -117,15 +98,14 @@
     }
     .skill div { flex: 1; }
     .skill strong { font-size: 11px; }
-    .skill small { display: block; color: var(--muted); font-size: 10px; margin-top: 2px; }
+    .skill small { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; }
     .skill button { padding: 6px; font-size: 10px; min-width: 54px; }
 
     .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 10px; color: var(--muted); }
-    .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 4px; background: var(--c); }
-
+    .legend i { display: inline-block; width: 9px; height: 9px; margin-right: 4px; border-radius: 2px; background: var(--c); }
     .log {
-      height: 72px; overflow: auto; font-size: 10px; color: #b8cee5;
-      border-top: 1px solid rgba(255,255,255,.08); padding-top: 7px;
+      height: 74px; overflow: auto; padding-top: 7px; border-top: 1px solid rgba(255,255,255,.08);
+      font-size: 10px; color: #b7d0ea;
     }
     .log div { margin-bottom: 3px; }
   </style>
@@ -134,20 +114,20 @@
   <div class="app">
     <aside class="column">
       <section class="panel">
-        <div class="logo">WATERWORKS</div>
-        <div class="sub">水圧で動く資源工場</div>
+        <div class="logo">HYDRONEER</div>
+        <div class="sub">排水と圧力で掘る工場設計</div>
       </section>
 
       <section class="panel">
-        <h2 class="title">機械を設置</h2>
+        <h2 class="title">設置機械</h2>
         <div class="tools" id="tools"></div>
-        <div class="hint" style="margin-top:9px;">機械を選択して、マップをクリック。1〜4キーでも選べます。</div>
+        <div class="hint" style="margin-top: 9px;">1〜4キーで選択し、マップをクリック。ドリルは資源の横に置かないと掘れない。ベルトはドリルとチェストの間に置く。</div>
       </section>
 
       <section class="panel">
-        <h2 class="title">ルール</h2>
+        <h2 class="title">ゲームの流れ</h2>
         <div class="hint">
-          ドリルは陸地に置く。流体ポンプは川や水溜まりに置いて水圧を発生させる。水源から離れるほど圧力が落ち、ドリルの生産効率も低下する。
+          水源にポンプを置いて圧力を作る。ドリルを圧力が残る位置に置いて、資源ノードの横で掘る。ベルトで運搬、チェストで保管。水圧と配置が工場の強さを決める。
         </div>
       </section>
 
@@ -155,9 +135,9 @@
         <h2 class="title">凡例</h2>
         <div class="legend">
           <span><i style="--c:#2d9ee8"></i>水源</span>
-          <span><i style="--c:#f5c45c"></i>資源層</span>
-          <span><i style="--c:#61b6ff"></i>ドリル</span>
-          <span><i style="--c:#65e6a5"></i>ポンプ</span>
+          <span><i style="--c:#f5c45c"></i>鉄層</span>
+          <span><i style="--c:#ffd166"></i>銅層</span>
+          <span><i style="--c:#d4a0ff"></i>石英層</span>
         </div>
       </section>
     </aside>
@@ -185,12 +165,12 @@
       </section>
 
       <section class="panel">
-        <h2 class="title">水圧ネットワーク</h2>
+        <h2 class="title">水圧 / 情報</h2>
         <div class="info">
           <div>平均水圧: <b id="pressure">0%</b></div>
           <div>稼働中ドリル: <b id="active">0</b></div>
           <div>発見資材: <b id="found">なし</b></div>
-          <div id="message">まず水上にポンプを置こう。</div>
+          <div id="message">ポンプを水源に、ドリルを資源ノードの横に置こう。</div>
         </div>
         <div class="actions">
           <button class="secondary" id="advance">次のサイクル</button>
@@ -220,17 +200,17 @@
     const H = 650;
 
     const machines = {
-      drill: { name: 'ドリル', key: '1', color: '#61b6ff', cost: { iron: 20, copper: 10 }, desc: '陸地に置いて水圧で資材を掘る' },
-      pump: { name: '流体ポンプ', key: '2', color: '#65e6a5', cost: { iron: 25, copper: 15 }, desc: '川や水溜まりに置いて圧力を作る' },
-      belt: { name: 'ベルトコンベア', key: '3', color: '#f6a85b', cost: { iron: 12, copper: 6 }, desc: 'ドリルとチェストの運搬効率を上げる' },
-      chest: { name: 'チェスト', key: '4', color: '#d899ff', cost: { iron: 15, copper: 10 }, desc: '採れた資材を保管する' }
+      drill: { name: 'ドリル', key: '1', color: '#61b6ff', cost: { iron: 20, copper: 10 }, desc: '資源ノードの横に置いて掘削する' },
+      pump: { name: 'ポンプ', key: '2', color: '#65e6a5', cost: { iron: 28, copper: 16 }, desc: '水源に置いて圧力を発生させる' },
+      belt: { name: 'ベルト', key: '3', color: '#f6a85b', cost: { iron: 12, copper: 6 }, desc: 'ドリルとチェストの間に置いて資源を運ぶ' },
+      chest: { name: 'チェスト', key: '4', color: '#d899ff', cost: { iron: 18, copper: 10 }, desc: '掘った資源を保管する' }
     };
 
     const skillDefs = [
       ['pressure', '高圧ポンプ', '水圧の減衰を軽減', 1],
-      ['drill', '超硬ドリル', '採掘量 +30%', 1],
-      ['belt', '高速ベルト', '運搬効率 +25%', 1],
-      ['luck', '地質解析', 'レア資材の確率 +12%', 2],
+      ['drill', '超硬ドリル', 'ドリル効率 +30%', 1],
+      ['belt', '高速ベルト', '搬送効率 +25%', 1],
+      ['luck', '地質解析', 'レア資材出現率 +12%', 2],
       ['efficiency', '節水機構', '全ドリル効率 +20%', 2],
       ['master', '工場主任', 'サイクル報酬アップ', 3]
     ];
@@ -253,28 +233,24 @@
         { x: 20, y: 5 }, { x: 21, y: 5 }, { x: 16, y: 4 }, { x: 16, y: 6 }, { x: 17, y: 4 }, { x: 17, y: 6 }
       ],
       ore: [
-        { x: 2, y: 2, amount: 30, kind: 'iron' },
+        { x: 3, y: 2, amount: 30, kind: 'iron' },
         { x: 5, y: 9, amount: 35, kind: 'iron' },
-        { x: 9, y: 3, amount: 30, kind: 'copper' },
-        { x: 14, y: 8, amount: 35, kind: 'copper' },
-        { x: 18, y: 2, amount: 28, kind: 'coal' },
-        { x: 20, y: 10, amount: 32, kind: 'coal' },
-        { x: 8, y: 11, amount: 30, kind: 'quartz' },
-        { x: 12, y: 5, amount: 34, kind: 'quartz' }
+        { x: 9, y: 3, amount: 28, kind: 'copper' },
+        { x: 14, y: 8, amount: 30, kind: 'copper' },
+        { x: 18, y: 2, amount: 24, kind: 'coal' },
+        { x: 20, y: 10, amount: 26, kind: 'coal' },
+        { x: 8, y: 11, amount: 20, kind: 'quartz' },
+        { x: 12, y: 6, amount: 22, kind: 'quartz' }
       ]
     };
 
     function fmt(n) { return Math.floor(n).toLocaleString('ja-JP'); }
     function log(msg) {
       const box = document.getElementById('log');
-      box.innerHTML = `<div>› ${msg}</div>` + box.innerHTML;
+      box.innerHTML = '<div>› ' + msg + '</div>' + box.innerHTML;
     }
-    function say(msg) {
-      document.getElementById('message').textContent = msg;
-    }
-    function owned(id) {
-      return !!state.skills[id];
-    }
+    function say(msg) { document.getElementById('message').textContent = msg; }
+    function owned(id) { return !!state.skills[id]; }
     function canAfford(cost) {
       return Object.keys(cost).every(k => (state.res[k] || 0) >= cost[k]);
     }
@@ -323,27 +299,18 @@
     }
 
     function pressureAt(x, y) {
-      const nearest = nearestPumpDistance(x, y);
-      if (!Number.isFinite(nearest)) return 0;
-      // 水に接していないと圧力がほぼゼロ
-      const waterTouch = hasWater(x, y) ||
-        state.water.some(w => Math.abs(w.x - x) + Math.abs(w.y - y) === 1);
-      if (!waterTouch) return 0;
-
-      let p = Math.max(0, 1 - nearest * 0.17);
+      const d = nearestPumpDistance(x, y);
+      if (!Number.isFinite(d)) return 0;
+      // ドリルは水辺/水源の近くで生きる。離れると圧力が落ちる。
+      const nearWater = hasWater(x, y) || state.water.some(w => Math.abs(w.x - x) + Math.abs(w.y - y) === 1);
+      if (!nearWater) return 0;
+      let p = Math.max(0, 1 - d * 0.17);
       if (owned('pressure')) p += 0.15;
       return Math.min(1, Math.max(0, p));
     }
 
-    function resourceRoll() {
-      const r = Math.random();
-      const rare = owned('luck') ? 0.12 : 0;
-
-      if (r < 0.46) return 'iron';
-      if (r < 0.76) return 'copper';
-      if (r < 0.9) return 'coal';
-      if (r < 0.9 + rare) return 'quartz';
-      return 'iron';
+    function resourceNodeNearDrill(x, y) {
+      return state.ore.find(node => Math.abs(node.x - x) <= 1 && Math.abs(node.y - y) <= 1 && node.amount > 0);
     }
 
     function placeBuilding(x, y) {
@@ -351,53 +318,48 @@
       const info = machines[type];
 
       if (state.buildings.some(b => b.x === x && b.y === y)) {
-        say('その場所には既に機械があります。');
+        say('そのマスには既に機械があります。');
         return;
       }
-
       if (type === 'pump' && !hasWater(x, y)) {
-        say('流体ポンプは川や水溜まりに置いてください。');
+        say('ポンプは水源に置いてください。');
         return;
       }
-
       if (type === 'drill' && hasWater(x, y)) {
         say('ドリルは陸地に置いてください。');
         return;
       }
-
       if (!canAfford(info.cost)) {
-        say('必要な資源が足りません。');
+        say('必要な資材が足りません。');
         return;
       }
 
       pay(info.cost);
       state.buildings.push({ type, x, y, cd: 0 });
       log(info.name + 'を設置');
-      say(info.name + 'を設置しました。');
+      say(info.name + ' を設置しました。');
       updateUI();
       draw();
     }
 
-    function drillEffect() {
+    function drillLogic() {
       let active = 0;
       let totalPressure = 0;
 
       state.buildings.forEach(b => {
         if (b.type !== 'drill') return;
         const p = pressureAt(b.x, b.y);
-        if (p <= 0) return;
+        const node = resourceNodeNearDrill(b.x, b.y);
+        if (!node || p <= 0) return;
 
-        const deposit = state.ore.filter(o => Math.abs(o.x - b.x) <= 1 && Math.abs(o.y - b.y) <= 1 && o.amount > 0)[0];
-        if (!deposit) return;
-
-        const multi = owned('drill') ? 1.3 : 1;
+        const boost = owned('drill') ? 1.3 : 1;
         const eff = owned('efficiency') ? 1.2 : 1;
-        const chance = Math.min(1, p * 0.9 * multi * eff);
+        const chance = Math.min(1, p * 0.9 * boost * eff);
 
         if (Math.random() < chance) {
-          const type = deposit.kind; // 置かれた資源層の性質を優先
-          state.res[type] += 1 + (owned('drill') ? 1 : 0);
-          deposit.amount -= 1;
+          const typeName = node.kind;
+          state.res[typeName] += 1 + (owned('drill') ? 1 : 0);
+          node.amount -= 1;
           state.score += 12;
           active += 1;
           totalPressure += p;
@@ -408,27 +370,24 @@
       document.getElementById('pressure').textContent = Math.round(avg * 100) + '%';
       document.getElementById('active').textContent = active;
 
-      if (active > 0) {
-        const found = Object.entries(state.res)
-          .filter(([k, v]) => ['coal', 'quartz'].includes(k) && v > 0)
-          .map(([k]) => k === 'coal' ? '石炭' : '石英')
-          .join('・') || '鉄・銅';
-        document.getElementById('found').textContent = found;
-      } else {
-        document.getElementById('found').textContent = 'なし';
-      }
+      const found = Object.entries(state.res)
+        .filter(([k, v]) => ['coal', 'quartz'].includes(k) && v > 0)
+        .map(([k]) => k === 'coal' ? '石炭' : '石英')
+        .join('・');
+      document.getElementById('found').textContent = found || 'なし';
     }
 
     function tick() {
       state.buildings.forEach(b => {
         if (b.type === 'pump') {
           state.res.power += 2 + (owned('pressure') ? 1 : 0);
-          b.cd = 16;
+          b.cd = 18;
         }
 
         if (b.type === 'belt') {
           state.score += 1;
-          b.cd = 24;
+          state.res.parts += owned('belt') ? 0.15 : 0.05;
+          b.cd = 20;
         }
 
         if (b.type === 'chest') {
@@ -438,26 +397,21 @@
       });
 
       if (state.buildings.some(b => b.type === 'drill')) {
-        drillEffect();
+        drillLogic();
       } else {
         document.getElementById('pressure').textContent = '0%';
-        document.getElementById('active').textContent = 0;
+        document.getElementById('active').textContent = '0';
         document.getElementById('found').textContent = 'なし';
       }
 
-      state.res.power = Math.max(0, state.res.power - state.buildings.filter(b => b.type !== 'pump').length * 0.02);
-      if (state.buildings.some(b => b.type === 'belt')) {
-        const beltBoost = (state.buildings.filter(b => b.type === 'belt').length * 0.1) + (owned('belt') ? 0.15 : 0);
-        state.res.parts += beltBoost;
-      }
-
+      const powerDrain = state.buildings.filter(b => b.type !== 'pump').length * 0.02;
+      state.res.power = Math.max(0, state.res.power - powerDrain);
       updateUI();
     }
 
     function renderSkills() {
       const box = document.getElementById('skills');
       box.innerHTML = '';
-
       skillDefs.forEach(([id, name, desc, cost]) => {
         const row = document.createElement('div');
         row.className = 'skill';
@@ -486,19 +440,12 @@
 
     function updateUI() {
       const keys = ['iron', 'copper', 'coal', 'quartz', 'power', 'parts'];
-      keys.forEach(k => {
-        const el = document.getElementById(k);
-        if (el) el.textContent = fmt(state.res[k]);
-      });
-
+      keys.forEach(k => document.getElementById(k).textContent = fmt(state.res[k]));
       document.getElementById('cycle').textContent = 'CYCLE ' + state.cycle;
       document.getElementById('goal').textContent = '目標 ' + fmt(1000 + state.prestige * 300);
       document.getElementById('selected').textContent = '選択: ' + machines[state.selected].name;
-      document.getElementById('score').textContent = 'score';
-      // legacy UI uses no score element here, so we ignore it.
-      document.getElementById('power').textContent = fmt(state.res.power);
-      renderSkills();
       renderTools();
+      renderSkills();
     }
 
     function advanceCycle() {
@@ -517,7 +464,7 @@
       state.score = 0;
       state.res = { iron: 80 + state.prestige * 15, copper: 50 + state.prestige * 8, coal: 0, quartz: 0, power: 0, parts: 0 };
       state.buildings = [];
-      say('工場を再起動。威信+' + gain + '。');
+      say('工場を再起動。威信 +' + gain + '。');
       log('再起動: 威信 +' + gain);
       updateUI();
       draw();
@@ -525,33 +472,32 @@
 
     function draw() {
       ctx.clearRect(0, 0, W, H);
-
       for (let y = 0; y < ROWS; y++) {
         for (let x = 0; x < COLS; x++) {
           const water = hasWater(x, y);
           ctx.fillStyle = water ? '#155b88' : ((x + y) % 2 ? '#142a3d' : '#172f46');
           ctx.fillRect(x * CELL, y * CELL, CELL, CELL);
-          ctx.strokeStyle = water ? 'rgba(85, 201, 255, 0.25)' : 'rgba(255,255,255,0.08)';
+          ctx.strokeStyle = water ? 'rgba(85, 201, 255, 0.25)' : 'rgba(255,255,255,0.07)';
           ctx.strokeRect(x * CELL, y * CELL, CELL, CELL);
-
           if (water) {
-            ctx.fillStyle = 'rgba(82,201,255,0.55)';
+            ctx.fillStyle = 'rgba(82,201,255,0.6)';
             ctx.fillRect(x * CELL + 7, y * CELL + 22, 36, 3);
           }
         }
       }
 
-      for (const o of state.ore) {
-        const exists = state.buildings.some(b => b.type === 'drill' && b.x === o.x && b.y === o.y);
-        if (exists || o.amount <= 0) continue;
-        ctx.fillStyle = o.kind === 'iron' ? '#f5c45c' : o.kind === 'copper' ? '#ffd166' : o.kind === 'coal' ? '#7c8fa8' : '#d9d3ff';
+      // 資源ノード
+      for (const node of state.ore) {
+        if (node.amount <= 0) continue;
+        const color = node.kind === 'iron' ? '#f5c45c' : node.kind === 'copper' ? '#ffd166' : node.kind === 'coal' ? '#9aa9ba' : '#d4a0ff';
+        ctx.fillStyle = color;
         ctx.beginPath();
-        ctx.arc(o.x * CELL + 25, o.y * CELL + 25, 13, 0, Math.PI * 2);
+        ctx.arc(node.x * CELL + 25, node.y * CELL + 25, 13, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = '#381e00';
+        ctx.fillStyle = '#351d00';
         ctx.font = 'bold 11px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('?', o.x * CELL + 25, o.y * CELL + 29);
+        ctx.fillText('?', node.x * CELL + 25, node.y * CELL + 29);
       }
 
       state.buildings.forEach(b => {
@@ -572,6 +518,17 @@
           ctx.fillStyle = p > 0.65 ? '#63e6a4' : p > 0.3 ? '#ffd166' : '#ff7676';
           ctx.fillRect(x, y + 34, 40 * p, 6);
         }
+
+        if (b.type === 'belt') {
+          ctx.strokeStyle = '#ffbf69';
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(x + 20, y + 40);
+          ctx.lineTo(x + 20, y + 60);
+          ctx.moveTo(x + 20, y + 0);
+          ctx.lineTo(x + 20, y - 20);
+          ctx.stroke();
+        }
       });
 
       if (state.mouse.over) {
@@ -582,9 +539,12 @@
           ctx.lineWidth = 3;
           ctx.strokeRect(gx * CELL + 2, gy * CELL + 2, CELL - 4, CELL - 4);
           if (state.selected === 'drill') {
-            ctx.fillStyle = 'rgba(255,255,255,0.9)';
+            const p = pressureAt(gx, gy);
+            const node = resourceNodeNearDrill(gx, gy);
+            ctx.fillStyle = 'rgba(255,255,255,0.95)';
             ctx.font = '11px sans-serif';
-            ctx.fillText(Math.round(pressureAt(gx, gy) * 100) + '% 水圧', gx * CELL + 4, gy * CELL + 14);
+            ctx.fillText(node ? '掘削可能' : '資源の横に置く', gx * CELL + 4, gy * CELL + 14);
+            ctx.fillText(Math.round(p * 100) + '% 水圧', gx * CELL + 4, gy * CELL + 28);
           }
         }
       }
@@ -598,25 +558,16 @@
       return { x: Math.floor(x / CELL), y: Math.floor(y / CELL) };
     }
 
-    cv.addEventListener('mousemove', e => {
-      mousePos(e);
-      draw();
-    });
-    cv.addEventListener('mouseleave', () => {
-      state.mouse.over = false;
-      draw();
-    });
+    cv.addEventListener('mousemove', e => { mousePos(e); draw(); });
+    cv.addEventListener('mouseleave', () => { state.mouse.over = false; draw(); });
     cv.addEventListener('click', e => {
       const p = mousePos(e);
-      if (p.x >= 0 && p.x < COLS && p.y >= 0 && p.y < ROWS) {
-        placeBuilding(p.x, p.y);
-      }
+      if (p.x >= 0 && p.x < COLS && p.y >= 0 && p.y < ROWS) placeBuilding(p.x, p.y);
     });
 
     document.addEventListener('keydown', e => {
-      const ids = Object.keys(machines);
-      const keyId = ids.find(id => machines[id].key === e.key);
-      if (keyId) selectMachine(keyId);
+      const id = Object.keys(machines).find(k => machines[k].key === e.key);
+      if (id) selectMachine(id);
       if (e.key.toLowerCase() === 'a') advanceCycle();
       if (e.key.toLowerCase() === 'r') restartGame();
     });
