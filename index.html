@@ -684,31 +684,32 @@
     document.getElementById('nextTurn').addEventListener('click', takeTurn);
 
     async function loadCards() {
-      try {
-        const response = await fetch('./data/cards.json', { cache: 'no-store' });
-        if (!response.ok) {
-          throw new Error(`カードデータの取得に失敗しました: ${response.status}`);
-        }
+  try {
+    const response = await fetch('./data/cards.json?' + Date.now());
 
-        const payload = await response.json();
-        const source = Array.isArray(payload)
-          ? payload
-          : (payload.cards || payload.data || []);
-
-        state.cards = source.map(normalizeCard);
-      } catch (error) {
-        console.error(error);
-        state.cards = [
-          { id: 'dm-sample-1', name: 'ガッツドラゴン', type: 'クリーチャー', civilization: ['火'], cost: 5, power: 5000, race: ['ドラゴン'], text: '攻撃時、カードを1枚引く。', image: '' },
-          { id: 'dm-sample-2', name: '深海の守護者', type: 'クリーチャー', civilization: ['水'], cost: 4, power: 4000, race: ['海竜'], text: '自分のターン開始時、1枚回復する。', image: '' },
-          { id: 'dm-sample-3', name: '雷鳴の騎士', type: 'クリーチャー', civilization: ['自然'], cost: 5, power: 4500, race: ['騎士'], text: '相手のクリーチャー1体に2000ダメージ。', image: '' },
-          { id: 'dm-sample-4', name: '祝福の炎', type: '呪文', civilization: ['火'], cost: 2, power: 0, race: [], text: '相手に2000ダメージを与える。', image: '' }
-        ];
-      }
-
-      renderCardGrid();
-      renderDeckList();
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
     }
+
+    const data = await response.json();
+
+    state.cards = Array.isArray(data)
+      ? data
+      : data.cards || data.data || [];
+
+    renderCardGrid();
+    renderDeckList();
+
+    console.log(`${state.cards.length}枚読み込みました`);
+  } catch (error) {
+    console.error('カードデータの読み込みに失敗しました:', error);
+
+    state.cards = [];
+    renderCardGrid();
+    renderDeckList();
+  }
+}
+
 
     setTab('home');
     loadCards();
