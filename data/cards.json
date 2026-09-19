@@ -1,22 +1,19 @@
 [
-  {"id":"dm-demo-001","name":"ガッツドラゴン","type":"クリーチャー","civilization":["火"],"cost":5,"power":5000,"race":["ドラゴン"],"text":"攻撃時、カードを1枚引く。"},
-  {"id":"dm-demo-002","name":"深海の守護者","type":"クリーチャー","civilization":["水"],"cost":4,"power":4000,"race":["海竜"],"text":"自分のターン開始時、カードを1枚引く。"},
-  {"id":"dm-demo-003","name":"雷鳴の騎士","type":"クリーチャー","civilization":["自然"],"cost":5,"power":4500,"race":["騎士"],"text":"相手のクリーチャー1体に2000ダメージ。"},
-  {"id":"dm-demo-004","name":"光の守護者","type":"クリーチャー","civilization":["光"],"cost":6,"power":6000,"race":["ガーディアン"],"text":"相手の攻撃を1回止める。"},
-  {"id":"dm-demo-005","name":"闇の呪術師","type":"クリーチャー","civilization":["闇"],"cost":3,"power":3000,"race":["デーモン・コマンド"],"text":"墓地のカードを1枚手札に戻す。"},
-  {"id":"dm-demo-006","name":"蒼き鎧騎士","type":"クリーチャー","civilization":["水"],"cost":4,"power":3500,"race":["リキッド・ピープル"],"text":"登場時、カードを1枚引く。"},
-  {"id":"dm-demo-007","name":"機械天使","type":"クリーチャー","civilization":["光"],"cost":3,"power":2500,"race":["グレートメカオー"],"text":"相手の手札を1枚確認する。"},
-  {"id":"dm-demo-008","name":"祝福の炎","type":"呪文","civilization":["火"],"cost":2,"power":null,"race":[],"text":"相手のクリーチャー1体に2000ダメージ。"},
-  {"id":"dm-demo-009","name":"森の成長","type":"呪文","civilization":["自然"],"cost":2,"power":null,"race":[],"text":"山札の上からカードを1枚マナゾーンに置く。"},
-  {"id":"dm-demo-010","name":"水流ドロー","type":"呪文","civilization":["水"],"cost":3,"power":null,"race":[],"text":"カードを2枚引く。"},
-  {"id":"dm-demo-011","name":"聖なる盾","type":"呪文","civilization":["光"],"cost":4,"power":null,"race":[],"text":"相手のクリーチャー1体をシールドに置く。"},
-  {"id":"dm-demo-012","name":"暗黒の取引","type":"呪文","civilization":["闇"],"cost":3,"power":null,"race":[],"text":"カードを2枚引き、自分の手札を1枚捨てる。"},
-  {"id":"dm-demo-013","name":"炎熱の戦士","type":"クリーチャー","civilization":["火"],"cost":2,"power":2000,"race":["ヒューマノイド"],"text":"攻撃できるなら攻撃する。"},
-  {"id":"dm-demo-014","name":"大地の巨人","type":"クリーチャー","civilization":["自然"],"cost":7,"power":9000,"race":["ジャイアント"],"text":"このクリーチャーはパワーが高い。"},
-  {"id":"dm-demo-015","name":"夜影の使い魔","type":"クリーチャー","civilization":["闇"],"cost":2,"power":1500,"race":["ゴースト"],"text":"破壊されたとき、カードを1枚引く。"},
-  {"id":"dm-demo-016","name":"白銀の聖騎士","type":"クリーチャー","civilization":["光"],"cost":5,"power":5000,"race":["イニシエート"],"text":"自分の他のクリーチャーを守る。"},
-  {"id":"dm-demo-017","name":"潮騒の賢者","type":"クリーチャー","civilization":["水"],"cost":6,"power":5500,"race":["サイバーロード"],"text":"登場時、山札からカードを3枚見て1枚手札に加える。"},
-  {"id":"dm-demo-018","name":"火山の斧使い","type":"クリーチャー","civilization":["火"],"cost":4,"power":4000,"race":["ドラゴノイド"],"text":"攻撃時、相手のシールドを1枚選ぶ。"},
-  {"id":"dm-demo-019","name":"生命の芽吹き","type":"呪文","civilization":["自然"],"cost":1,"power":null,"race":[],"text":"自分のマナゾーンのカードを1枚アンタップする。"},
-  {"id":"dm-demo-020","name":"影縫い","type":"呪文","civilization":["闇"],"cost":4,"power":null,"race":[],"text":"相手のクリーチャー1体を破壊する。"}
+  {
+    "id": "DM-001",
+    "name": "サンプルカード1",
+    "文明": "火",
+    "type": "クリーチャー",
+    "cost": 3,
+    "power": "3000",
+    "text": "これは動作確認用のカードです。"
+  },
+  {
+    "id": "DM-002",
+    "name": "サンプルカード2",
+    "文明": "水",
+    "type": "呪文",
+    "cost": 2,
+    "text": "これは2枚目の動作確認用カードです。"
+  }
 ]
