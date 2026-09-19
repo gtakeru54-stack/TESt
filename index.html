@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Deck Duel</title>
+
   <style>
     :root {
       --bg1: #101826;
@@ -23,8 +24,12 @@
       --shadow: rgba(0, 0, 0, 0.45);
     }
 
-    * { box-sizing: border-box; }
-    html, body {
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
       margin: 0;
       min-height: 100%;
       background: linear-gradient(180deg, #0f1a2d, #0a0f18 65%);
@@ -39,11 +44,21 @@
       padding: 10px;
     }
 
+    button,
+    input {
+      font: inherit;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
     .phone {
-      width: min(420px, 100vw - 10px);
+      width: min(420px, calc(100vw - 10px));
       min-height: calc(100vh - 16px);
       background: linear-gradient(180deg, var(--bg2), var(--bg1));
-      border: 1px solid rgba(255,255,255,.12);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 18px;
       overflow: hidden;
       box-shadow: 0 24px 60px var(--shadow);
@@ -58,7 +73,7 @@
       justify-content: space-between;
       padding: 0 16px;
       background: rgba(8, 14, 21, 0.65);
-      border-bottom: 1px solid rgba(255,255,255,.06);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .brand {
@@ -93,7 +108,7 @@
 
     .card {
       background: linear-gradient(180deg, var(--panel-alt), var(--panel));
-      border: 1px solid rgba(255,255,255,.08);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 12px;
       padding: 12px;
     }
@@ -104,9 +119,9 @@
       place-items: center;
       text-align: center;
       color: var(--muted);
-      border: 1px dashed rgba(255,255,255,.14);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
       border-radius: 12px;
-      background: rgba(255,255,255,.02);
+      background: rgba(255, 255, 255, 0.02);
     }
 
     .deck-top {
@@ -114,15 +129,21 @@
       gap: 8px;
       align-items: center;
     }
+
     .search {
       flex: 1;
-      background: rgba(255,255,255,.03);
-      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 10px;
       height: 42px;
       color: var(--text);
       padding: 0 12px;
       font-size: 15px;
+      outline: none;
+    }
+
+    .search:focus {
+      border-color: var(--blue);
     }
 
     .small-btn {
@@ -143,8 +164,8 @@
     }
 
     .mini-card {
-      background: rgba(255,255,255,.03);
-      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 12px;
       padding: 10px;
     }
@@ -182,8 +203,8 @@
     }
 
     .deck-item {
-      background: rgba(255,255,255,.02);
-      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 10px;
       padding: 8px 10px;
       display: flex;
@@ -204,7 +225,7 @@
 
     .deck-item button {
       border: 0;
-      background: rgba(255,255,255,.06);
+      background: rgba(255, 255, 255, 0.06);
       color: var(--text);
       border-radius: 8px;
       padding: 6px 8px;
@@ -224,15 +245,15 @@
       justify-content: space-between;
       gap: 10px;
       padding: 10px 12px;
-      background: rgba(255,255,255,.03);
-      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 12px;
     }
 
     .life-box {
       flex: 1;
-      background: rgba(255,255,255,.02);
-      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 10px;
       padding: 10px;
       text-align: center;
@@ -246,8 +267,8 @@
 
     .turn-card {
       padding: 12px;
-      background: rgba(255,255,255,.03);
-      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 12px;
     }
 
@@ -261,8 +282,8 @@
     }
 
     .battle-log .line {
-      background: rgba(255,255,255,.02);
-      border: 1px solid rgba(255,255,255,.06);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 8px;
       padding: 8px 10px;
       line-height: 1.5;
@@ -297,7 +318,7 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       background: rgba(10, 18, 28, 0.92);
-      border-top: 1px solid rgba(255,255,255,.08);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(12px);
     }
 
@@ -317,7 +338,10 @@
     }
 
     @media (max-width: 420px) {
-      body { padding: 0; }
+      body {
+        padding: 0;
+      }
+
       .phone {
         width: 100vw;
         min-height: 100vh;
@@ -326,19 +350,25 @@
     }
   </style>
 </head>
+
 <body>
   <div class="phone">
     <header class="topbar">
       <div class="brand">DUEL</div>
-      <div class="tiny">battle app</div>
+      <div class="tiny">DUEL MASTERS</div>
     </header>
 
     <main class="screen">
       <section id="homeTab" class="section active">
         <div class="card home-empty">
           <div>
-            <div class="tiny" style="margin-bottom:8px;">HOME</div>
-            <div style="font-size:18px; font-weight:800;">デュエルの準備をしよう</div>
+            <div class="tiny" style="margin-bottom: 8px;">HOME</div>
+            <div style="font-size: 18px; font-weight: 800;">
+              デュエルの準備をしよう
+            </div>
+            <div style="font-size: 12px; margin-top: 8px;">
+              デッキを作成して対戦を開始できます
+            </div>
           </div>
         </div>
       </section>
@@ -346,18 +376,28 @@
       <section id="deckTab" class="section">
         <div class="card">
           <div class="deck-top">
-            <input id="cardSearch" class="search" placeholder="カードを検索" />
+            <input
+              id="cardSearch"
+              class="search"
+              placeholder="カードを検索"
+              autocomplete="off"
+            />
             <button class="small-btn" id="refreshCards">更新</button>
           </div>
         </div>
 
         <div class="card">
-          <div class="tiny" style="margin-bottom:10px;">カード一覧</div>
+          <div class="tiny" style="margin-bottom: 10px;">
+            カード一覧
+          </div>
           <div id="cardGrid" class="mini-grid"></div>
         </div>
 
         <div class="card">
-          <div class="tiny" style="margin-bottom:10px;">現在のデッキ <span id="deckCount">0 / 60</span></div>
+          <div class="tiny" style="margin-bottom: 10px;">
+            現在のデッキ
+            <span id="deckCount">0 / 60</span>
+          </div>
           <div id="deckList" class="deck-list"></div>
         </div>
       </section>
@@ -369,6 +409,7 @@
               <div class="tiny">PLAYER</div>
               <strong id="playerLife">8000</strong>
             </div>
+
             <div class="life-box">
               <div class="tiny">AI</div>
               <strong id="aiLife">8000</strong>
@@ -376,12 +417,19 @@
           </div>
 
           <div class="turn-card">
-            <div class="tiny" style="margin-bottom:6px;">ターン</div>
-            <div style="font-size:24px; font-weight:900;" id="turnLabel">1</div>
+            <div class="tiny" style="margin-bottom: 6px;">ターン</div>
+            <div
+              style="font-size: 24px; font-weight: 900;"
+              id="turnLabel"
+            >
+              1
+            </div>
           </div>
 
-          <div class="card" style="padding:10px;">
-            <div class="tiny" style="margin-bottom:8px;">バトルログ</div>
+          <div class="card" style="padding: 10px;">
+            <div class="tiny" style="margin-bottom: 8px;">
+              バトルログ
+            </div>
             <div id="battleLog" class="battle-log"></div>
           </div>
 
@@ -405,21 +453,18 @@
       activeTab: 'home',
       cards: [],
       deck: [],
+      aiDeck: [],
       battle: {
         running: false,
         turn: 1,
         playerLife: 8000,
         aiLife: 8000,
         logs: []
-      },
-      aiDecks: [
-        ['青眼の白龍', '黒魔術の儀式', 'ブラック・マジシャン', 'スライム', 'サンダー・ドラゴン'],
-        ['サイバー・ドラゴン', 'マジック・キャンサー', 'ファイアー・ボール', '真紅眼の黒龍', '闇のデッキ'],
-        ['海皇の咆哮', '白き森の妖精', 'レッド・デーモン', '破壊剣', 'ライトニング・ドラゴン']
-      ]
+      }
     };
 
     const navButtons = document.querySelectorAll('.nav-btn');
+
     const sections = {
       home: document.getElementById('homeTab'),
       deck: document.getElementById('deckTab'),
@@ -427,24 +472,84 @@
     };
 
     function normalizeArray(value) {
-      if (!value) return [];
-      if (Array.isArray(value)) return value.map(item => String(item).trim()).filter(Boolean);
-      return String(value).split(/[、,・/]/).map(item => item.trim()).filter(Boolean);
+      if (!value) {
+        return [];
+      }
+
+      if (Array.isArray(value)) {
+        return value
+          .map(item => String(item).trim())
+          .filter(Boolean);
+      }
+
+      return String(value)
+        .split(/[、,・/]/)
+        .map(item => item.trim())
+        .filter(Boolean);
     }
 
     function normalizeCard(raw, index) {
+      const card = raw || {};
+
       return {
-        id: raw.id ?? raw.card_id ?? `dm-${index + 1}`,
-        name: raw.name ?? raw.card_name ?? raw.カード名 ?? '名称不明',
-        type: raw.type ?? raw.種類 ?? raw.カードタイプ ?? 'カード',
-        civilization: normalizeArray(raw.civilization ?? raw.文明),
-        cost: raw.cost ?? raw.コスト ?? 0,
-        power: raw.power ?? raw.パワー ?? raw.atk ?? null,
-        race: normalizeArray(raw.race ?? raw.種族),
-        text: raw.text ?? raw.effect ?? raw.能力 ?? '',
-        image: raw.image ?? raw.img ?? '',
-        atk: raw.power ?? raw.パワー ?? raw.atk ?? null,
-        def: raw.def ?? null
+        id: String(
+          card.id ??
+          card.card_id ??
+          card.cardId ??
+          `dm-${index + 1}`
+        ),
+
+        name:
+          card.name ??
+          card.card_name ??
+          card.cardName ??
+          card.カード名 ??
+          '名称不明',
+
+        type:
+          card.type ??
+          card.card_type ??
+          card.cardType ??
+          card.種類 ??
+          card.カードタイプ ??
+          'カード',
+
+        civilization: normalizeArray(
+          card.civilization ??
+          card.civilizations ??
+          card文明 ??
+          card.文明 ??
+          card文明
+        ),
+
+        cost: card.cost ?? card.コスト ?? 0,
+
+        power:
+          card.power ??
+          card.power_value ??
+          card.パワー ??
+          card.atk ??
+          null,
+
+        race: normalizeArray(
+          card.race ??
+          card.races ??
+          card.種族
+        ),
+
+        text:
+          card.text ??
+          card.effect ??
+          card.ability ??
+          card.能力 ??
+          '',
+
+        image:
+          card.image ??
+          card.image_url ??
+          card.imageUrl ??
+          card.img ??
+          ''
       };
     }
 
@@ -459,69 +564,126 @@
 
     function setTab(tab) {
       state.activeTab = tab;
-      navButtons.forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.tab === tab);
+
+      navButtons.forEach(button => {
+        button.classList.toggle(
+          'active',
+          button.dataset.tab === tab
+        );
       });
-      Object.entries(sections).forEach(([name, el]) => {
-        el.classList.toggle('active', name === tab);
+
+      Object.entries(sections).forEach(([name, element]) => {
+        element.classList.toggle('active', name === tab);
       });
     }
 
-    navButtons.forEach(btn => {
-      btn.addEventListener('click', () => setTab(btn.dataset.tab));
+    navButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        setTab(button.dataset.tab);
+      });
     });
 
     function getSearchText() {
-      return document.getElementById('cardSearch').value.trim().toLowerCase();
+      return document
+        .getElementById('cardSearch')
+        .value
+        .trim()
+        .toLowerCase();
     }
 
     function cardMatches(card, keyword) {
-      if (!keyword) return true;
+      if (!keyword) {
+        return true;
+      }
 
       const haystack = [
         card.name,
         card.type,
         card.text,
+        card.cost,
+        card.power,
         ...(card.civilization || []),
         ...(card.race || [])
-      ].filter(Boolean).join(' ').toLowerCase();
+      ]
+        .filter(value => {
+          return value !== null && value !== undefined;
+        })
+        .join(' ')
+        .toLowerCase();
 
       return haystack.includes(keyword);
     }
 
     function renderCardGrid() {
       const grid = document.getElementById('cardGrid');
-      const q = getSearchText();
-      const filtered = state.cards.filter(card => cardMatches(card, q)).slice(0, 50);
+      const keyword = getSearchText();
+
+      const filtered = state.cards
+        .filter(card => cardMatches(card, keyword))
+        .slice(0, 50);
 
       if (!filtered.length) {
-        grid.innerHTML = '<div class="mini-card"><h4>カードが見つかりません</h4><div class="mini-meta">検索条件を変えてみてください</div></div>';
+        grid.innerHTML = `
+          <div class="mini-card">
+            <h4>カードが見つかりません</h4>
+            <div class="mini-meta">
+              JSONファイルまたは検索条件を確認してください
+            </div>
+          </div>
+        `;
         return;
       }
 
-      grid.innerHTML = filtered.map(card => {
-        const already = state.deck.some(item => item.id === card.id);
-        const civ = (card.civilization || []).join('・') || '無色';
-        const race = (card.race || []).join('・') || 'なし';
-        const cost = card.cost ?? '—';
-        const power = card.power ?? '—';
+      grid.innerHTML = filtered
+        .map(card => {
+          const already = state.deck.some(item => {
+            return String(item.id) === String(card.id);
+          });
 
-        return `
-          <div class="mini-card">
-            <h4>${escapeHtml(card.name)}</h4>
-            <div class="mini-meta">
-              ${escapeHtml(card.type || 'カード')}<br>
-              文明: ${escapeHtml(civ)}<br>
-              コスト: ${escapeHtml(cost)} / パワー: ${escapeHtml(power)}<br>
-              種族: ${escapeHtml(race)}
+          const civilization =
+            (card.civilization || []).join('・') || '無色';
+
+          const race =
+            (card.race || []).join('・') || 'なし';
+
+          const cost =
+            card.cost !== null && card.cost !== undefined
+              ? card.cost
+              : '—';
+
+          const power =
+            card.power !== null && card.power !== undefined
+              ? card.power
+              : '—';
+
+          return `
+            <div class="mini-card">
+              <h4>${escapeHtml(card.name)}</h4>
+
+              <div class="mini-meta">
+                ${escapeHtml(card.type || 'カード')}<br>
+                文明: ${escapeHtml(civilization)}<br>
+                コスト: ${escapeHtml(cost)}
+                /
+                パワー: ${escapeHtml(power)}<br>
+                種族: ${escapeHtml(race)}
+              </div>
+
+              <button
+                data-add="${escapeHtml(card.id)}"
+                ${already ? 'disabled' : ''}
+              >
+                ${already ? '追加済み' : '追加'}
+              </button>
             </div>
-            <button data-add="${escapeHtml(card.id)}" ${already ? 'disabled' : ''}>${already ? '追加済み' : '追加'}</button>
-          </div>
-        `;
-      }).join('');
+          `;
+        })
+        .join('');
 
       grid.querySelectorAll('[data-add]').forEach(button => {
-        button.addEventListener('click', () => addToDeck(String(button.dataset.add)));
+        button.addEventListener('click', () => {
+          addToDeck(String(button.dataset.add));
+        });
       });
     }
 
@@ -530,8 +692,15 @@
         alert('デッキは60枚までです。');
         return;
       }
-      const card = state.cards.find(item => String(item.id) === String(cardId));
-      if (!card) return;
+
+      const card = state.cards.find(item => {
+        return String(item.id) === String(cardId);
+      });
+
+      if (!card) {
+        return;
+      }
+
       state.deck.push({
         id: String(card.id),
         name: card.name,
@@ -543,12 +712,16 @@
         text: card.text || '',
         image: card.image || ''
       });
+
       renderDeckList();
       renderCardGrid();
     }
 
     function removeFromDeck(cardId) {
-      state.deck = state.deck.filter(item => String(item.id) !== String(cardId));
+      state.deck = state.deck.filter(item => {
+        return String(item.id) !== String(cardId);
+      });
+
       renderDeckList();
       renderCardGrid();
     }
@@ -556,43 +729,95 @@
     function renderDeckList() {
       const list = document.getElementById('deckList');
       const count = document.getElementById('deckCount');
+
       count.textContent = `${state.deck.length} / 60`;
 
       if (!state.deck.length) {
-        list.innerHTML = '<div class="deck-item"><div><div class="deck-item-name">デッキが空です</div><div class="deck-item-sub">カードを追加して作成</div></div></div>';
+        list.innerHTML = `
+          <div class="deck-item">
+            <div>
+              <div class="deck-item-name">
+                デッキが空です
+              </div>
+              <div class="deck-item-sub">
+                カードを追加してデッキを作成してください
+              </div>
+            </div>
+          </div>
+        `;
         return;
       }
 
-      list.innerHTML = state.deck.map(card => `
-        <div class="deck-item">
-          <div>
-            <div class="deck-item-name">${escapeHtml(card.name)}</div>
-            <div class="deck-item-sub">${escapeHtml(card.type)} / パワー ${escapeHtml(card.power ?? '—')}</div>
-          </div>
-          <button data-remove="${escapeHtml(card.id)}">削除</button>
-        </div>
-      `).join('');
+      list.innerHTML = state.deck
+        .map(card => {
+          return `
+            <div class="deck-item">
+              <div>
+                <div class="deck-item-name">
+                  ${escapeHtml(card.name)}
+                </div>
+
+                <div class="deck-item-sub">
+                  ${escapeHtml(card.type)}
+                  /
+                  コスト ${escapeHtml(card.cost ?? '—')}
+                  /
+                  パワー ${escapeHtml(card.power ?? '—')}
+                </div>
+              </div>
+
+              <button data-remove="${escapeHtml(card.id)}">
+                削除
+              </button>
+            </div>
+          `;
+        })
+        .join('');
 
       list.querySelectorAll('[data-remove]').forEach(button => {
-        button.addEventListener('click', () => removeFromDeck(String(button.dataset.remove)));
+        button.addEventListener('click', () => {
+          removeFromDeck(String(button.dataset.remove));
+        });
       });
     }
 
     function buildAiDeck() {
       if (!state.cards.length) {
         return [
-          { id: 'ai-demo-1', name: 'ガッツドラゴン', power: 5000, type: 'クリーチャー' },
-          { id: 'ai-demo-2', name: '深海の守護者', power: 4000, type: 'クリーチャー' },
-          { id: 'ai-demo-3', name: '雷鳴の騎士', power: 4500, type: 'クリーチャー' },
-          { id: 'ai-demo-4', name: '祝福の炎', power: 0, type: '呪文' }
+          {
+            id: 'ai-demo-1',
+            name: 'サンプル火文明クリーチャー',
+            power: 5000,
+            type: 'クリーチャー'
+          },
+          {
+            id: 'ai-demo-2',
+            name: 'サンプル水文明クリーチャー',
+            power: 4000,
+            type: 'クリーチャー'
+          },
+          {
+            id: 'ai-demo-3',
+            name: 'サンプル自然文明クリーチャー',
+            power: 4500,
+            type: 'クリーチャー'
+          },
+          {
+            id: 'ai-demo-4',
+            name: 'サンプル呪文',
+            power: 0,
+            type: '呪文'
+          }
         ];
       }
 
       const pool = [...state.cards];
       const chosen = [];
+
       while (chosen.length < 6 && pool.length) {
-        const idx = Math.floor(Math.random() * pool.length);
-        const card = pool.splice(idx, 1)[0];
+        const index = Math.floor(Math.random() * pool.length);
+        const card = pool.splice(index, 1)[0];
+
         chosen.push({
           id: String(card.id),
           name: card.name,
@@ -600,21 +825,29 @@
           type: card.type || 'カード'
         });
       }
+
       return chosen;
     }
 
     function addLog(text) {
       const logBox = document.getElementById('battleLog');
       const line = document.createElement('div');
+
       line.className = 'line';
       line.textContent = text;
+
       logBox.prepend(line);
     }
 
     function updateBattleHud() {
-      document.getElementById('playerLife').textContent = state.battle.playerLife;
-      document.getElementById('aiLife').textContent = state.battle.aiLife;
-      document.getElementById('turnLabel').textContent = state.battle.turn;
+      document.getElementById('playerLife').textContent =
+        state.battle.playerLife;
+
+      document.getElementById('aiLife').textContent =
+        state.battle.aiLife;
+
+      document.getElementById('turnLabel').textContent =
+        state.battle.turn;
     }
 
     function startBattle() {
@@ -628,24 +861,41 @@
       state.battle.turn = 1;
       state.battle.playerLife = 8000;
       state.battle.aiLife = 8000;
+      state.battle.logs = [];
+
       document.getElementById('battleLog').innerHTML = '';
 
-      const aiDeck = buildAiDeck();
-      state.aiDeck = aiDeck;
+      state.aiDeck = buildAiDeck();
 
-      addLog('AIがデッキを選択しました。対戦開始！');
-      addLog('カードのパワーを比較して、ターンを進めます。');
+      addLog('AIがデッキを選択しました。');
+      addLog('対戦開始！');
+      addLog('カードのパワーを比較してターンを進めます。');
+
       updateBattleHud();
     }
 
     function takeTurn() {
       if (!state.battle.running) {
-        addLog('まず対戦開始を押して、デッキを選択してください。');
+        addLog('まず「対戦開始」を押してください。');
         return;
       }
 
-      const playerCard = state.deck[Math.floor(Math.random() * state.deck.length)] || { name: 'プレイヤーのカード', power: 1200 };
-      const aiCard = (state.aiDeck || []).sort((a, b) => (Number(b.power) || 0) - (Number(a.power) || 0))[0] || { name: 'AIカード', power: 1200 };
+      const playerCard =
+        state.deck[
+          Math.floor(Math.random() * state.deck.length)
+        ] || {
+          name: 'プレイヤーのカード',
+          power: 1200
+        };
+
+      const sortedAiDeck = [...state.aiDeck].sort((a, b) => {
+        return (Number(b.power) || 0) - (Number(a.power) || 0);
+      });
+
+      const aiCard = sortedAiDeck[0] || {
+        name: 'AIカード',
+        power: 1200
+      };
 
       const playerPower = Number(playerCard.power) || 1200;
       const aiPower = Number(aiCard.power) || 1200;
@@ -655,15 +905,34 @@
 
       if (playerPower >= aiPower) {
         aiDamage = playerPower - aiPower + 300;
-        state.battle.aiLife = Math.max(0, state.battle.aiLife - aiDamage);
+        state.battle.aiLife = Math.max(
+          0,
+          state.battle.aiLife - aiDamage
+        );
       } else {
         playerDamage = aiPower - playerPower + 300;
-        state.battle.playerLife = Math.max(0, state.battle.playerLife - playerDamage);
+        state.battle.playerLife = Math.max(
+          0,
+          state.battle.playerLife - playerDamage
+        );
       }
 
-      addLog(`ターン ${state.battle.turn}: ${playerCard.name} (${playerPower}) vs ${aiCard.name} (${aiPower})`);
-      addLog(`${playerDamage ? 'AIが' + playerDamage + 'ダメージ' : 'プレイヤーが' + aiDamage + 'ダメージ'}を与えました。`);
-      addLog(`PLAYER ${state.battle.playerLife} / AI ${state.battle.aiLife}`);
+      addLog(
+        `ターン ${state.battle.turn}: ` +
+        `${playerCard.name} (${playerPower}) vs ` +
+        `${aiCard.name} (${aiPower})`
+      );
+
+      if (playerDamage > 0) {
+        addLog(`プレイヤーが${playerDamage}ダメージを受けました。`);
+      } else {
+        addLog(`AIに${aiDamage}ダメージを与えました。`);
+      }
+
+      addLog(
+        `PLAYER ${state.battle.playerLife} / ` +
+        `AI ${state.battle.aiLife}`
+      );
 
       state.battle.turn += 1;
       updateBattleHud();
@@ -672,47 +941,69 @@
         addLog('AIの勝利です。');
         state.battle.running = false;
       }
+
       if (state.battle.aiLife <= 0) {
         addLog('プレイヤーの勝利です。');
         state.battle.running = false;
       }
     }
 
-    document.getElementById('cardSearch').addEventListener('input', renderCardGrid);
-    document.getElementById('refreshCards').addEventListener('click', loadCards);
-    document.getElementById('startBattle').addEventListener('click', startBattle);
-    document.getElementById('nextTurn').addEventListener('click', takeTurn);
-
     async function loadCards() {
-  try {
-    const response = await fetch('./data/cards.json?' + Date.now());
+      try {
+        const response = await fetch(
+          './data/cards.json?' + Date.now()
+        );
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const rawCards = Array.isArray(data)
+          ? data
+          : data.cards || data.data || [];
+
+        state.cards = rawCards.map((card, index) => {
+          return normalizeCard(card, index);
+        });
+
+        renderCardGrid();
+        renderDeckList();
+
+        console.log(`${state.cards.length}枚読み込みました`);
+      } catch (error) {
+        console.error(
+          'カードデータの読み込みに失敗しました:',
+          error
+        );
+
+        state.cards = [];
+
+        renderCardGrid();
+        renderDeckList();
+      }
     }
 
-    const data = await response.json();
+    document
+      .getElementById('cardSearch')
+      .addEventListener('input', renderCardGrid);
 
-    state.cards = Array.isArray(data)
-      ? data
-      : data.cards || data.data || [];
+    document
+      .getElementById('refreshCards')
+      .addEventListener('click', loadCards);
 
-    renderCardGrid();
-    renderDeckList();
+    document
+      .getElementById('startBattle')
+      .addEventListener('click', startBattle);
 
-    console.log(`${state.cards.length}枚読み込みました`);
-  } catch (error) {
-    console.error('カードデータの読み込みに失敗しました:', error);
-
-    state.cards = [];
-    renderCardGrid();
-    renderDeckList();
-  }
-}
-
+    document
+      .getElementById('nextTurn')
+      .addEventListener('click', takeTurn);
 
     setTab('home');
     loadCards();
+    renderDeckList();
     updateBattleHud();
   </script>
 </body>
