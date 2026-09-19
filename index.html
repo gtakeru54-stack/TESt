@@ -3,499 +3,685 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tetris</title>
+  <title>Factory Ascension</title>
   <style>
     :root {
-      --bg: #111827;
-      --panel: #1f2937;
-      --grid: #374151;
-      --text: #e5e7eb;
-      --accent: #60a5fa;
+      --bg: #0b1020;
+      --panel: #121a2b;
+      --panel2: #1a2439;
+      --grid: #24314a;
+      --grid2: #1a2a3f;
+      --text: #eaf2ff;
+      --muted: #9ab0d0;
+      --accent: #7dd3fc;
+      --accent2: #86efac;
+      --warn: #fbbf24;
       --danger: #f87171;
+      --shadow: rgba(0, 0, 0, 0.35);
     }
 
     * { box-sizing: border-box; }
 
-    body {
+    html, body {
       margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, #0f172a, #111827);
+      height: 100%;
+      background: radial-gradient(circle at top, #17223d 0%, var(--bg) 38%, #080d18 100%);
       color: var(--text);
-      font-family: sans-serif;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    .game {
+    body {
       display: flex;
-      gap: 24px;
-      align-items: flex-start;
-      background: rgba(31, 41, 55, 0.8);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
       padding: 20px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    }
+
+    .app {
+      width: min(1200px, 100%);
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 18px;
+      background: rgba(11,16,32,0.75);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      box-shadow: 0 20px 60px var(--shadow);
+      padding: 18px;
+      backdrop-filter: blur(4px);
+    }
+
+    .board-wrap {
+      background: linear-gradient(180deg, #172030, #0f172a);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 12px;
+      position: relative;
     }
 
     canvas {
       display: block;
-      background: #000;
-      border: 2px solid rgba(255,255,255,0.1);
-      border-radius: 8px;
+      width: 100%;
+      height: auto;
+      background: #0b1120;
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.08);
+      cursor: crosshair;
     }
 
-    .side {
-      width: 140px;
+    .sidebar {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
     .panel {
-      background: rgba(255,255,255,0.04);
+      background: linear-gradient(180deg, rgba(26,36,57,0.95), rgba(18,26,43,0.92));
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px;
-      padding: 12px 10px;
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
     }
 
-    .panel h3 {
-      margin: 0 0 10px;
-      font-size: 14px;
+    .title {
+      margin: 0 0 8px;
+      font-size: 16px;
       letter-spacing: 0.08em;
-      color: #cbd5e1;
+      color: var(--accent);
+      text-transform: uppercase;
     }
 
-    .stats {
+    .resource-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .resource-item {
+      background: rgba(147, 197, 253, 0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .resource-item .label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .resource-item .value {
+      font-weight: 700;
       font-size: 18px;
-      font-weight: bold;
     }
 
-    .controls {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      font-size: 13px;
-      line-height: 1.7;
-      color: #dbeafe;
+    .build-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
     }
 
     button {
+      appearance: none;
       border: none;
-      border-radius: 8px;
-      padding: 10px 14px;
-      background: var(--accent);
-      color: #0b1120;
+      border-radius: 10px;
+      background: linear-gradient(180deg, #3b82f6, #2563eb);
+      color: white;
       font-weight: 700;
+      padding: 10px 10px;
       cursor: pointer;
+      transition: transform 0.12s ease, filter 0.12s ease;
+      box-shadow: 0 10px 20px rgba(37,99,235,0.25);
     }
 
     button:hover {
-      filter: brightness(1.08);
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+    }
+
+    button.secondary {
+      background: linear-gradient(180deg, #1f2937, #0f172a);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: none;
+    }
+
+    .costs {
+      display: block;
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .skill-tree {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .skill {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .skill .name {
+      font-size: 13px;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .skill .meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .skill button {
+      min-width: 70px;
+      padding: 7px 8px;
+      font-size: 12px;
+    }
+
+    .status {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--muted);
+      min-height: 90px;
+    }
+
+    .badge {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 5px 8px;
+      font-size: 11px;
+      background: rgba(134, 239, 172, 0.12);
+      color: var(--accent2);
+      border: 1px solid rgba(134, 239, 172, 0.2);
+    }
+
+    .hud-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 980px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="game">
-    <canvas id="board" width="300" height="600"></canvas>
+  <div class="app">
+    <div class="board-wrap">
+      <div class="hud-line">
+        <div class="badge" id="turnBadge">Cycle 1</div>
+        <div class="badge" id="objectiveBadge">Goal: 2000</div>
+      </div>
+      <canvas id="gameCanvas" width="820" height="560"></canvas>
+    </div>
 
-    <div class="side">
+    <div class="sidebar">
       <div class="panel">
-        <h3>Next</h3>
-        <canvas id="next" width="120" height="120"></canvas>
+        <h2 class="title">Resources</h2>
+        <div class="resource-list">
+          <div class="resource-item"><div class="label">Steel</div><div class="value" id="ironValue">0</div></div>
+          <div class="resource-item"><div class="label">Copper</div><div class="value" id="copperValue">0</div></div>
+          <div class="resource-item"><div class="label">Energy</div><div class="value" id="energyValue">0</div></div>
+          <div class="resource-item"><div class="label">Parts</div><div class="value" id="partsValue">0</div></div>
+        </div>
       </div>
 
       <div class="panel">
-        <h3>Score</h3>
-        <div class="stats" id="score">0</div>
+        <h2 class="title">Build</h2>
+        <div class="build-grid">
+          <button data-build="miner">Miner</button>
+          <button data-build="smelter">Smelter</button>
+          <button data-build="generator">Power</button>
+          <button data-build="assembler">Assembler</button>
+        </div>
+        <div class="status" id="buildHint">Click a cell to place structure. Press 1-4 to switch.</div>
       </div>
 
       <div class="panel">
-        <h3>Lines</h3>
-        <div class="stats" id="lines">0</div>
+        <h2 class="title">Factory</h2>
+        <div class="status">
+          <div>Cycle score: <strong id="scoreValue">0</strong></div>
+          <div>Prestige: <strong id="prestigeValue">0</strong></div>
+          <div>Skill points: <strong id="skillValue">0</strong></div>
+        </div>
+        <div class="build-grid" style="margin-top: 12px;">
+          <button class="secondary" id="advanceBtn">Advance Cycle</button>
+          <button class="secondary" id="resetBtn">Reset & Ascend</button>
+        </div>
       </div>
 
       <div class="panel">
-        <h3>Level</h3>
-        <div class="stats" id="level">1</div>
+        <h2 class="title">Skill Tree</h2>
+        <div class="skill-tree" id="skillTree"></div>
       </div>
-
-      <div class="panel">
-        <h3>Controls</h3>
-        <ul class="controls">
-          <li>← → Move</li>
-          <li>↓ Soft drop</li>
-          <li>↑ Rotate</li>
-          <li>Space Hard drop</li>
-          <li>P Pause</li>
-        </ul>
-      </div>
-
-      <button id="startBtn">Start / Restart</button>
     </div>
   </div>
 
   <script>
-    const COLS = 10;
-    const ROWS = 20;
-    const BLOCK = 30;
-    const EMPTY = 0;
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
 
-    const boardCanvas = document.getElementById('board');
-    const boardCtx = boardCanvas.getContext('2d');
-
-    const nextCanvas = document.getElementById('next');
-    const nextCtx = nextCanvas.getContext('2d');
-
-    const scoreEl = document.getElementById('score');
-    const linesEl = document.getElementById('lines');
-    const levelEl = document.getElementById('level');
-    const startBtn = document.getElementById('startBtn');
-
-    const COLORS = {
-      I: '#38bdf8',
-      O: '#facc15',
-      T: '#a78bfa',
-      S: '#4ade80',
-      Z: '#f87171',
-      J: '#60a5fa',
-      L: '#fb923c'
+    const resourceEls = {
+      iron: document.getElementById('ironValue'),
+      copper: document.getElementById('copperValue'),
+      energy: document.getElementById('energyValue'),
+      parts: document.getElementById('partsValue')
     };
 
-    const SHAPES = {
-      I: [
-        [1, 1, 1, 1]
-      ],
-      O: [
-        [1, 1],
-        [1, 1]
-      ],
-      T: [
-        [1, 1, 1],
-        [0, 1, 0]
-      ],
-      S: [
-        [0, 1, 1],
-        [1, 1, 0]
-      ],
-      Z: [
-        [1, 1, 0],
-        [0, 1, 1]
-      ],
-      J: [
-        [1, 0, 0],
-        [1, 1, 1]
-      ],
-      L: [
-        [0, 0, 1],
-        [1, 1, 1]
-      ]
+    const scoreEl = document.getElementById('scoreValue');
+    const prestigeEl = document.getElementById('prestigeValue');
+    const skillEl = document.getElementById('skillValue');
+    const turnBadge = document.getElementById('turnBadge');
+    const objectiveBadge = document.getElementById('objectiveBadge');
+    const buildHint = document.getElementById('buildHint');
+    const skillTreeEl = document.getElementById('skillTree');
+
+    const GRID_COLS = 16;
+    const GRID_ROWS = 11;
+    const TILE = 40;
+    const MAP_W = GRID_COLS * TILE;
+    const MAP_H = GRID_ROWS * TILE;
+    const BUILDINGS = {
+      miner: { name: 'Miner', cost: { iron: 25, copper: 12 }, color: '#60a5fa', desc: 'Extracts metal from ore tiles.' },
+      smelter: { name: 'Smelter', cost: { iron: 40, copper: 24 }, color: '#fbbf24', desc: 'Turns ore into steel.' },
+      generator: { name: 'Power', cost: { iron: 30, copper: 18 }, color: '#34d399', desc: 'Produces power every few seconds.' },
+      assembler: { name: 'Assembler', cost: { iron: 55, copper: 35 }, color: '#f472b6', desc: 'Builds parts from steel and copper.' }
     };
 
-    let board = [];
-    let current = null;
-    let next = null;
-    let score = 0;
-    let lines = 0;
-    let level = 1;
-    let dropInterval = 700;
-    let dropTimer = null;
-    let gameOver = false;
-    let paused = false;
+    const SKILLS = [
+      { id: 'mineBoost', label: 'Miner Boost', cost: 1, desc: '+20% mining yield', effect: 'mineBoost' },
+      { id: 'smeltBoost', label: 'Smelter Boost', cost: 1, desc: '+25% smelting output', effect: 'smeltBoost' },
+      { id: 'powerBoost', label: 'Power Grid', cost: 1, desc: '+30% power gain', effect: 'powerBoost' },
+      { id: 'buildSpeed', label: 'Automation', cost: 1, desc: 'Buildings work faster', effect: 'buildSpeed' },
+      { id: 'supplyChain', label: 'Supply Chain', cost: 2, desc: '+15% all output', effect: 'supplyChain' },
+      { id: 'droneOps', label: 'Drone Ops', cost: 2, desc: 'Bonus cycle score', effect: 'droneOps' }
+    ];
 
-    function createBoard() {
-      return Array.from({ length: ROWS }, () => Array(COLS).fill(EMPTY));
+    const state = {
+      resources: { iron: 120, copper: 60, energy: 30, parts: 0 },
+      score: 0,
+      cycle: 1,
+      prestige: 0,
+      skillPoints: 0,
+      selectedBuild: 'miner',
+      mouse: { x: 0, y: 0, over: false },
+      world: {
+        ore: [
+          { x: 1, y: 2, type: 'iron', amount: 14 },
+          { x: 4, y: 5, type: 'iron', amount: 18 },
+          { x: 9, y: 2, type: 'copper', amount: 16 },
+          { x: 12, y: 7, type: 'copper', amount: 14 },
+          { x: 7, y: 8, type: 'iron', amount: 12 },
+          { x: 13, y: 3, type: 'copper', amount: 18 },
+          { x: 3, y: 8, type: 'iron', amount: 10 },
+          { x: 10, y: 9, type: 'copper', amount: 16 }
+        ],
+        buildings: []
+      },
+      skills: {}
+    };
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
     }
 
-    function cloneMatrix(matrix) {
-      return matrix.map(row => [...row]);
+    function addResource(type, amount) {
+      state.resources[type] = (state.resources[type] || 0) + amount;
+      updateHUD();
     }
 
-    function randomPiece() {
-      const keys = Object.keys(SHAPES);
-      const name = keys[Math.floor(Math.random() * keys.length)];
-      const matrix = cloneMatrix(SHAPES[name]);
-      return { type: name, matrix };
+    function canAfford(cost) {
+      return Object.keys(cost).every(key => (state.resources[key] || 0) >= cost[key]);
     }
 
-    function resetGame() {
-      board = createBoard();
-      score = 0;
-      lines = 0;
-      level = 1;
-      dropInterval = 700;
-      gameOver = false;
-      paused = false;
-      current = randomPiece();
-      next = randomPiece();
-      current.x = Math.floor((COLS - current.matrix[0].length) / 2);
-      current.y = -1;
-      updateUI();
-      drawBoard();
-      drawNext();
-      startDrop();
-    }
-
-    function updateUI() {
-      scoreEl.textContent = String(score);
-      linesEl.textContent = String(lines);
-      levelEl.textContent = String(level);
-    }
-
-    function startDrop() {
-      clearInterval(dropTimer);
-      dropTimer = setInterval(() => {
-        if (!paused && !gameOver) {
-          moveDown();
-        }
-      }, dropInterval);
-    }
-
-    function collides(matrix, offsetX, offsetY) {
-      for (let y = 0; y < matrix.length; y++) {
-        for (let x = 0; x < matrix[y].length; x++) {
-          if (!matrix[y][x]) continue;
-          const newX = x + offsetX;
-          const newY = y + offsetY;
-
-          if (newX < 0 || newX >= COLS || newY >= ROWS) return true;
-
-          if (newY >= 0 && board[newY][newX] !== EMPTY) return true;
-        }
-      }
-      return false;
-    }
-
-    function mergePiece() {
-      current.matrix.forEach((row, y) => {
-        row.forEach((value, x) => {
-          if (!value) return;
-          const boardY = current.y + y;
-          const boardX = current.x + x;
-          if (boardY >= 0) {
-            board[boardY][boardX] = current.type;
-          }
-        });
+    function spend(cost) {
+      Object.keys(cost).forEach(key => {
+        state.resources[key] -= cost[key];
       });
+      updateHUD();
     }
 
-    function clearLines() {
-      let cleared = 0;
-      for (let y = ROWS - 1; y >= 0; y--) {
-        if (board[y].every(cell => cell !== EMPTY)) {
-          board.splice(y, 1);
-          board.unshift(Array(COLS).fill(EMPTY));
-          cleared++;
-          y++;
-        }
-      }
-
-      if (cleared > 0) {
-        lines += cleared;
-        const lineScores = [0, 100, 300, 500, 800];
-        score += lineScores[cleared] * level;
-        level = Math.floor(lines / 10) + 1;
-        dropInterval = Math.max(120, 700 - (level - 1) * 60);
-        startDrop();
-      }
-    }
-
-    function spawnPiece() {
-      current = next;
-      current.x = Math.floor((COLS - current.matrix[0].length) / 2);
-      current.y = -1;
-
-      next = randomPiece();
-
-      if (collides(current.matrix, current.x, current.y)) {
-        gameOver = true;
-        clearInterval(dropTimer);
-        alert('Game Over');
-      }
-    }
-
-    function moveDown() {
-      if (!current) return;
-      if (!collides(current.matrix, current.x, current.y + 1)) {
-        current.y++;
-      } else {
-        mergePiece();
-        clearLines();
-        spawnPiece();
-      }
-      drawBoard();
-      drawNext();
-      updateUI();
-    }
-
-    function moveHoriz(dir) {
-      if (gameOver || paused) return;
-      if (!collides(current.matrix, current.x + dir, current.y)) {
-        current.x += dir;
-        drawBoard();
-      }
-    }
-
-    function rotateMatrix(matrix) {
-      const rows = matrix.length;
-      const cols = matrix[0].length;
-      const rotated = Array.from({ length: cols }, () => Array(rows).fill(0));
-
-      for (let y = 0; y < rows; y++) {
-        for (let x = 0; x < cols; x++) {
-          rotated[x][rows - 1 - y] = matrix[y][x];
-        }
-      }
-      return rotated;
-    }
-
-    function rotateCurrent() {
-      if (gameOver || paused || !current) return;
-
-      const rotated = rotateMatrix(current.matrix);
-      const kicks = [0, -1, 1, -2, 2];
-
-      for (const kick of kicks) {
-        if (!collides(rotated, current.x + kick, current.y)) {
-          current.matrix = rotated;
-          current.x += kick;
-          drawBoard();
-          return;
-        }
-      }
-    }
-
-    function hardDrop() {
-      if (gameOver || paused) return;
-
-      while (!collides(current.matrix, current.x, current.y + 1)) {
-        current.y++;
-        score += 2;
-      }
-
-      mergePiece();
-      clearLines();
-      spawnPiece();
-      updateUI();
-      drawBoard();
-      drawNext();
-    }
-
-    function drawCell(ctx, x, y, color, size = BLOCK) {
-      ctx.fillStyle = color;
-      ctx.fillRect(x * size, y * size, size, size);
-
-      ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-      ctx.strokeRect(x * size + 0.5, y * size + 0.5, size - 1, size - 1);
-    }
-
-    function drawBoard() {
-      boardCtx.clearRect(0, 0, boardCanvas.width, boardCanvas.height);
-
-      // background grid
-      for (let y = 0; y < ROWS; y++) {
-        for (let x = 0; x < COLS; x++) {
-          boardCtx.strokeStyle = 'rgba(255,255,255,0.06)';
-          boardCtx.strokeRect(x * BLOCK, y * BLOCK, BLOCK, BLOCK);
-        }
-      }
-
-      // placed blocks
-      for (let y = 0; y < ROWS; y++) {
-        for (let x = 0; x < COLS; x++) {
-          if (board[y][x] !== EMPTY) {
-            drawCell(boardCtx, x, y, COLORS[board[y][x]]);
-          }
-        }
-      }
-
-      // current piece
-      if (current) {
-        current.matrix.forEach((row, y) => {
-          row.forEach((value, x) => {
-            if (value) {
-              const drawX = current.x + x;
-              const drawY = current.y + y;
-              if (drawY >= 0) {
-                drawCell(boardCtx, drawX, drawY, COLORS[current.type]);
-              }
-            }
-          });
-        });
-      }
-
-      if (paused) {
-        boardCtx.fillStyle = 'rgba(17, 24, 39, 0.5)';
-        boardCtx.fillRect(0, 0, boardCanvas.width, boardCanvas.height);
-        boardCtx.fillStyle = '#f8fafc';
-        boardCtx.font = 'bold 28px sans-serif';
-        boardCtx.textAlign = 'center';
-        boardCtx.fillText('PAUSE', boardCanvas.width / 2, boardCanvas.height / 2 + 10);
-      }
-
-      if (gameOver) {
-        boardCtx.fillStyle = 'rgba(17, 24, 39, 0.55)';
-        boardCtx.fillRect(0, 0, boardCanvas.width, boardCanvas.height);
-        boardCtx.fillStyle = '#fca5a5';
-        boardCtx.font = 'bold 28px sans-serif';
-        boardCtx.textAlign = 'center';
-        boardCtx.fillText('GAME OVER', boardCanvas.width / 2, boardCanvas.height / 2 + 10);
-      }
-    }
-
-    function drawNext() {
-      nextCtx.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
-
-      const size = 24;
-      const offsetX = Math.floor((nextCanvas.width - next.matrix[0].length * size) / 2);
-      const offsetY = Math.floor((nextCanvas.height - next.matrix.length * size) / 2);
-
-      next.matrix.forEach((row, y) => {
-        row.forEach((value, x) => {
-          if (value) {
-            nextCtx.fillStyle = COLORS[next.type];
-            nextCtx.fillRect(offsetX + x * size, offsetY + y * size, size, size);
-            nextCtx.strokeStyle = 'rgba(255,255,255,0.15)';
-            nextCtx.strokeRect(offsetX + x * size + 0.5, offsetY + y * size + 0.5, size - 1, size - 1);
-          }
-        });
-      });
-    }
-
-    function togglePause() {
-      if (gameOver) return;
-      paused = !paused;
-      drawBoard();
-    }
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'p' || e.key === 'P') {
-        togglePause();
+    function handleBuildPlacement(gridX, gridY) {
+      const cell = state.world.buildings.find(b => b.x === gridX && b.y === gridY);
+      if (cell) {
+        buildHint.textContent = 'That tile is occupied.';
         return;
       }
 
-      if (paused || gameOver) return;
-
-      if (e.key === 'ArrowLeft') {
-        moveHoriz(-1);
-      } else if (e.key === 'ArrowRight') {
-        moveHoriz(1);
-      } else if (e.key === 'ArrowDown') {
-        score += 1;
-        moveDown();
-        updateUI();
-      } else if (e.key === 'ArrowUp') {
-        rotateCurrent();
-      } else if (e.key === ' ') {
-        e.preventDefault();
-        hardDrop();
+      const buildingType = state.selectedBuild;
+      const building = BUILDINGS[buildingType];
+      if (!building) return;
+      if (!canAfford(building.cost)) {
+        buildHint.textContent = 'Not enough resources.';
+        return;
       }
-    });
+      spend(building.cost);
+      state.world.buildings.push({
+        type: buildingType,
+        x: gridX,
+        y: gridY,
+        cooldown: 0,
+        level: 1
+      });
+      buildHint.textContent = `${building.name} built at (${gridX}, ${gridY}).`;
+      updateHUD();
+    }
 
-    startBtn.addEventListener('click', () => {
-      resetGame();
-    });
+    function getSkillCost(skillId) {
+      const skill = SKILLS.find(item => item.id === skillId);
+      return skill ? skill.cost : 0;
+    }
 
-    resetGame();
+    function skillIsOwned(skillId) {
+      return !!state.skills[skillId];
+    }
+
+    function buySkill(skillId) {
+      if (skillIsOwned(skillId)) return;
+      const cost = getSkillCost(skillId);
+      if (state.skillPoints < cost) {
+        buildHint.textContent = 'Not enough skill points.';
+        return;
+      }
+      state.skillPoints -= cost;
+      state.skills[skillId] = true;
+      renderSkillTree();
+      buildHint.textContent = `Skill acquired: ${SKILLS.find(s => s.id === skillId).label}`;
+      updateHUD();
+    }
+
+    function renderSkillTree() {
+      skillTreeEl.innerHTML = '';
+      SKILLS.forEach(skill => {
+        const item = document.createElement('div');
+        item.className = 'skill';
+
+        const info = document.createElement('div');
+        info.className = 'name';
+        info.innerHTML = `<div>${skill.label}</div><div class="meta">${skill.desc}</div>`;
+
+        const button = document.createElement('button');
+        button.textContent = skillIsOwned(skill.id) ? 'Owned' : `${skill.cost} SP`;
+        button.disabled = skillIsOwned(skill.id) || state.skillPoints < skill.cost;
+        button.addEventListener('click', () => buySkill(skill.id));
+
+        item.appendChild(info);
+        item.appendChild(button);
+        skillTreeEl.appendChild(item);
+      });
+    }
+
+    function getMineModifier() {
+      let value = 1;
+      if (state.skills.mineBoost) value *= 1.2;
+      if (state.skills.supplyChain) value *= 1.15;
+      return value;
+    }
+
+    function getSmeltModifier() {
+      let value = 1;
+      if (state.skills.smeltBoost) value *= 1.25;
+      if (state.skills.supplyChain) value *= 1.15;
+      return value;
+    }
+
+    function getPowerModifier() {
+      let value = 1;
+      if (state.skills.powerBoost) value *= 1.3;
+      if (state.skills.supplyChain) value *= 1.15;
+      return value;
+    }
+
+    function getBuildSpeedModifier() {
+      let value = 1;
+      if (state.skills.buildSpeed) value *= 1.3;
+      return value;
+    }
+
+    function updateHUD() {
+      resourceEls.iron.textContent = Math.floor(state.resources.iron);
+      resourceEls.copper.textContent = Math.floor(state.resources.copper);
+      resourceEls.energy.textContent = Math.floor(state.resources.energy);
+      resourceEls.parts.textContent = Math.floor(state.resources.parts);
+      scoreEl.textContent = Math.floor(state.score);
+      prestigeEl.textContent = state.prestige;
+      skillEl.textContent = state.skillPoints;
+      turnBadge.textContent = `Cycle ${state.cycle}`;
+      objectiveBadge.textContent = `Goal: ${Math.floor(2000 + state.prestige * 250)}`;
+      renderSkillTree();
+    }
+
+    function advanceCycle() {
+      state.cycle += 1;
+      state.score += 100 + state.cycle * 20 + state.prestige * 10;
+      state.skillPoints += 1 + (state.skills.droneOps ? 1 : 0);
+      if (state.skills.droneOps) {
+        state.score += 150;
+      }
+      updateHUD();
+      buildHint.textContent = 'New cycle started. Productivity increased.';
+    }
+
+    function resetAscend() {
+      const earned = Math.floor(state.score / 250) + state.prestige;
+      state.prestige += earned > 0 ? earned : 1;
+      state.cycle = 1;
+      state.score = 0;
+      state.resources = { iron: 120, copper: 60, energy: 30, parts: 0 };
+      state.world.buildings = [];
+      state.selectedBuild = 'miner';
+      buildHint.textContent = `Ascended. Permanent prestige +${earned > 0 ? earned : 1}.`;
+      updateHUD();
+      renderSkillTree();
+    }
+
+    function processBuildings() {
+      state.world.buildings.forEach(building => {
+        const { type, x, y } = building;
+        building.cooldown -= 1 * getBuildSpeedModifier();
+
+        if (building.cooldown > 0) return;
+        building.cooldown = 0;
+
+        if (type === 'miner') {
+          const nearbyOre = state.world.ore.filter(ore => Math.abs(ore.x - x) <= 1 && Math.abs(ore.y - y) <= 1 && ore.amount > 0);
+          if (!nearbyOre.length) return;
+          const target = nearbyOre[Math.floor(Math.random() * nearbyOre.length)];
+          const yield = 4 * getMineModifier();
+          target.amount = clamp(target.amount - 1, 0, 9999);
+          state.resources.iron += yield;
+          state.score += 1.5;
+          if (target.amount <= 0) {
+            target.amount = 0;
+          }
+        }
+
+        if (type === 'smelter') {
+          if (state.resources.iron < 8) return;
+          const output = 3 * getSmeltModifier();
+          state.resources.iron -= 8;
+          state.resources.copper += 2;
+          state.resources.parts += output * 0.5;
+          state.score += 2.3;
+        }
+
+        if (type === 'generator') {
+          const output = 4 * getPowerModifier();
+          state.resources.energy += output;
+          state.score += 1.2;
+        }
+
+        if (type === 'assembler') {
+          if (state.resources.iron < 12 || state.resources.copper < 8 || state.resources.energy < 4) return;
+          const amount = 2 * (1 + (state.skills.supplyChain ? 0.15 : 0));
+          state.resources.iron -= 12;
+          state.resources.copper -= 8;
+          state.resources.energy -= 4;
+          state.resources.parts += amount;
+          state.score += 4;
+        }
+
+        building.cooldown = Math.max(18, 32 / getBuildSpeedModifier()) * (type === 'generator' ? 1.4 : 1);
+      });
+
+      state.resources.energy = Math.max(0, state.resources.energy - 0.02 * state.world.buildings.length);
+      if (state.resources.energy < 0) state.resources.energy = 0;
+      updateHUD();
+    }
+
+    function drawWorld() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#0b1220';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      for (let y = 0; y < GRID_ROWS; y++) {
+        for (let x = 0; x < GRID_COLS; x++) {
+          const isDark = (x + y) % 2 === 0;
+          ctx.fillStyle = isDark ? '#142238' : '#101b2c';
+          ctx.fillRect(x * TILE, y * TILE, TILE, TILE);
+          ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+          ctx.strokeRect(x * TILE, y * TILE, TILE, TILE);
+        }
+      }
+
+      state.world.ore.forEach(ore => {
+        if (ore.amount <= 0) return;
+        const x = ore.x * TILE + 6;
+        const y = ore.y * TILE + 6;
+        const color = ore.type === 'iron' ? '#60a5fa' : '#fbbf24';
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, TILE - 12, TILE - 12);
+        ctx.fillStyle = 'rgba(255,255,255,0.8)';
+        ctx.font = '12px sans-serif';
+        ctx.fillText(String(Math.max(1, Math.ceil(ore.amount))), x + 10, y + 20);
+      });
+
+      state.world.buildings.forEach(build => {
+        const x = build.x * TILE + 6;
+        const y = build.y * TILE + 6;
+        const cfg = BUILDINGS[build.type];
+        ctx.fillStyle = cfg.color;
+        ctx.fillRect(x, y, TILE - 12, TILE - 12);
+        ctx.fillStyle = '#0b1020';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.fillText(build.type[0].toUpperCase(), x + 10, y + 20);
+      });
+
+      const mx = state.mouse.x;
+      const my = state.mouse.y;
+      if (state.mouse.over) {
+        const gx = Math.floor(mx / TILE);
+        const gy = Math.floor(my / TILE);
+        if (gx >= 0 && gx < GRID_COLS && gy >= 0 && gy < GRID_ROWS) {
+          ctx.strokeStyle = '#86efac';
+          ctx.lineWidth = 3;
+          ctx.strokeRect(gx * TILE + 2, gy * TILE + 2, TILE - 4, TILE - 4);
+        }
+      }
+    }
+
+    function getCellFromMouse(event) {
+      const rect = canvas.getBoundingClientRect();
+      const x = (event.clientX - rect.left) * (canvas.width / rect.width);
+      const y = (event.clientY - rect.top) * (canvas.height / rect.height);
+      state.mouse.x = x;
+      state.mouse.y = y;
+      state.mouse.over = true;
+      const gx = Math.floor(x / TILE);
+      const gy = Math.floor(y / TILE);
+      return { gx, gy };
+    }
+
+    function checkWinCondition() {
+      const goal = 2000 + state.prestige * 250;
+      if (state.score >= goal) {
+        buildHint.textContent = `Factory reached goal! Advance cycle to keep growing.`;
+        state.skillPoints += 1;
+        state.score += 50;
+        updateHUD();
+      }
+    }
+
+    function gameLoop() {
+      processBuildings();
+      checkWinCondition();
+      drawWorld();
+      updateHUD();
+      requestAnimationFrame(gameLoop);
+    }
+
+    function bindEvents() {
+      canvas.addEventListener('mousemove', (event) => {
+        getCellFromMouse(event);
+      });
+
+      canvas.addEventListener('mouseleave', () => {
+        state.mouse.over = false;
+      });
+
+      canvas.addEventListener('click', (event) => {
+        const { gx, gy } = getCellFromMouse(event);
+        if (gx < 0 || gx >= GRID_COLS || gy < 0 || gy >= GRID_ROWS) return;
+        handleBuildPlacement(gx, gy);
+      });
+
+      document.querySelectorAll('[data-build]').forEach(button => {
+        button.addEventListener('click', () => {
+          const type = button.getAttribute('data-build');
+          state.selectedBuild = type;
+          buildHint.textContent = `${BUILDINGS[type].name}: ${BUILDINGS[type].desc}`;
+        });
+      });
+
+      document.getElementById('advanceBtn').addEventListener('click', advanceCycle);
+      document.getElementById('resetBtn').addEventListener('click', resetAscend);
+
+      document.addEventListener('keydown', (e) => {
+        const keyMap = {
+          '1': 'miner',
+          '2': 'smelter',
+          '3': 'generator',
+          '4': 'assembler'
+        };
+
+        if (keyMap[e.key]) {
+          state.selectedBuild = keyMap[e.key];
+          buildHint.textContent = `${BUILDINGS[state.selectedBuild].name}: ${BUILDINGS[state.selectedBuild].desc}`;
+        }
+
+        if (e.key.toLowerCase() === 'r') {
+          resetAscend();
+        }
+        if (e.key.toLowerCase() === 'a') {
+          advanceCycle();
+        }
+      });
+    }
+
+    bindEvents();
+    renderSkillTree();
+    updateHUD();
+    drawWorld();
+    requestAnimationFrame(gameLoop);
   </script>
 </body>
 </html>
